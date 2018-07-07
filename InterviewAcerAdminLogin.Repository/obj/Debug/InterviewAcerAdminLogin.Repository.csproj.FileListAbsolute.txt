@@ -1,0 +1,6 @@
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\bin\Debug\InterviewAcerAdminLogin.Repository.exe.config
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\bin\Debug\InterviewAcerAdminLogin.Repository.exe
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\bin\Debug\InterviewAcerAdminLogin.Repository.pdb
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\obj\Debug\InterviewAcerAdminLogin.Repository.csprojResolveAssemblyReference.cache
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\obj\Debug\InterviewAcerAdminLogin.Repository.exe
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Repository\obj\Debug\InterviewAcerAdminLogin.Repository.pdb

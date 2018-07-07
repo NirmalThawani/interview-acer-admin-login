@@ -1,0 +1,7 @@
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Debug\InterviewAcerAdminLogin.Common.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Debug\InterviewAcerAdminLogin.Common.pdb
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Debug\Newtonsoft.Json.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Debug\Newtonsoft.Json.xml
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\Debug\InterviewAcerAdminLogin.Common.csprojResolveAssemblyReference.cache
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\Debug\InterviewAcerAdminLogin.Common.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\Debug\InterviewAcerAdminLogin.Common.pdb
