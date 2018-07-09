@@ -11,12 +11,12 @@ namespace InterviewAcerAdminLogin.Models
         [DataType(DataType.EmailAddress)]
         [Required]      
         [Display(Name = "Email Id")]  
-        public string UserName { get; set; }
+        public string LoginUserName { get; set; }
 
         [DataType(DataType.Password)]
         [Required]
         [MinLength(8)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string LoginPassword { get; set; }
     }
 }

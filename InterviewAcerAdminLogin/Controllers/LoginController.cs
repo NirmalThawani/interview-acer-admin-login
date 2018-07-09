@@ -26,7 +26,7 @@ namespace InterviewAcerAdminLogin.Controllers
         [HttpPost]
         public async Task<ActionResult> ValidateLogin(Login model)
         {
-            var loginSuccess = await PerformLoginActions(model.UserName, model.Password);
+            var loginSuccess = await PerformLoginActions(model.LoginUserName, model.LoginPassword);
             if (loginSuccess)
             {
                 return RedirectToAction("Index", "Home");

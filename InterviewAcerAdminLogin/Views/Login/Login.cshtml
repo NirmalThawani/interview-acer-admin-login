@@ -24,29 +24,30 @@
                         <!-- logo end-->
                         <p class="f-bold f-24 m-t-30 m-b-30 Avenir-Heavy">Admin login</p>
                         <!-- input for email id -->
-                        @using (Html.BeginForm("ValidateLogin", "Login", FormMethod.Post, new { }))
-                        {
+
+                        @using (Html.BeginForm("ValidateLogin", "Login", FormMethod.Post, new { id = "loginForm" }))
+                        {                            
                             <div class="form-row  m-b-30">
-                                <input type="text" name="UserName" id="form-email" class="form-textbox form-control" required>
+                                <input type="text" name="LoginUserName"  id="form-email"  class="form-textbox form-control" required>
                                 <label for="form-email" class="form-label">Email Id</label>
                                 <div id="emailFormatValidation" style="color: #a94442; display:none" class="alert">Please entre valid email address</div>
                             </div>
                             <p class="m-t-20"></p>
                         <!-- input for email id end-->
-
+                            <input id="password" style="opacity: 0;position: absolute;" type="password" name="fakepasswordremembered">
                             <div class="form-row">
-                                <input type="password" name="Password" id="form-password" class="form-textbox form-control" required>
+                                <input type="password" name="LoginPassword" id="form-password" class="form-textbox form-control" required>
                                 <label for="form-password" class="form-label">Password</label>
                                 <div id="passwordLengthValidation" style="color: #a94442; display:none" class="alert">Password length should be minimum 8 characters</div>
                             </div>
                         <!-- sign in -->
                             <div class="m-t-40 p-b-10 ">
                                 <a class="pull-left m-t-20 f-16" href="#">Forgot your password?</a>
-                                <button type="submit" id="signInButton"  class="btn btn-arrow primary-btn pull-right singIn-btn ">Sign In</button>
+                                <button type="submit" id="signInButton" class="btn btn-arrow primary-btn pull-right singIn-btn ">Sign In</button>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="m-t-40 p-b-10 ">
-                             @Html.ValidationSummary(true, "", new { @style = "color: #a94442" })
+                                @Html.ValidationSummary(true, "", new { @style = "color: #a94442" })
                             </div>
                         }
                         <!-- sign in end-->
@@ -66,6 +67,7 @@
 </body>
 </html>
 @Scripts.Render("~/bundles/jqueryval")
+
 <script type="text/javascript">
     $(document).ready(function (e) {
         var emailIsValid = true;
@@ -76,13 +78,11 @@
             $('.validation-summary-errors').remove()
             var email = $('#form-email').val();
             var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
-            if(regex.test(email))
-            {
+            if (regex.test(email)) {
                 emailIsValid = true;
                 $('#emailFormatValidation').hide();
             }
-            else
-            {
+            else {
                 emailIsValid = false;
                 $('#emailFormatValidation').show();
             }
@@ -91,8 +91,7 @@
         $('#form-password').on('change', function () {
             $('.validation-summary-errors').remove()
             var password = $('#form-password').val();
-            if(password.length > passwordMinLength || password.length == 0)
-            {
+            if (password.length > passwordMinLength || password.length == 0) {
                 passwordIsValid = true;
                 $('#passwordLengthValidation').hide();
             }
@@ -105,6 +104,6 @@
             if (emailIsValid == false || passwordIsValid == false) {
                 return false;
             }
-        })
+        });
     });
 </script>
