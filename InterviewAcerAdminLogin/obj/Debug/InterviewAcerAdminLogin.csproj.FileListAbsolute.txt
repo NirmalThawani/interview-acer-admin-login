@@ -45,3 +45,15 @@ W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\InterviewAc
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\InterviewAcerAdminLogin.Common.dll
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.Formatting.dll
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\InterviewAcerAdminLogin.Common.pdb
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.Extensions.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.Primitives.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.WebRequest.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.xml
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\System.Net.Http.WebRequest.xml
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\LinqToExcel.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\Remotion.Data.Linq.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\Remotion.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\Remotion.Interfaces.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\LinqToExcel.xml
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\obj\Debug\InterviewAcerAdminLogin.csproj.ResolveComReference.cache

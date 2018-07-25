@@ -1,0 +1,6 @@
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Release\InterviewAcerAdminLogin.Common.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Release\InterviewAcerAdminLogin.Common.pdb
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Release\Newtonsoft.Json.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\Release\Newtonsoft.Json.xml
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\Release\InterviewAcerAdminLogin.Common.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\Release\InterviewAcerAdminLogin.Common.pdb

@@ -1,0 +1,134 @@
+﻿@model IEnumerable<InterviewAcerAdminLogin.ViewModel.Stages>
+<div class="dashboard">
+    <div class="tab-content">
+        <!-- Face-to-face tab content -->
+        <div id="Face-to-face-tab" class="tab-pane fade in active">
+            <div class="dashboard-title-wrapper">
+                <p class="page-title">Stage of interview</p>
+                <ul id="interviewStages" class="nav nav-tabs custom-nav-tab subcustom-nav-tab m-t-20">
+                    @foreach (var stage in Model)
+                    {
+                        if (stage.isActive)
+                        {
+                            <li class="active"><a data-toggle="tab" data-stageId=@stage.StageId >@stage.StageName</a></li>
+                        }
+                        else
+                        {
+                            <li><a data-toggle="tab" data-stageId=@stage.StageId >@stage.StageName</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+            <br>
+            <div class="m-t-30 tab-content">
+                <!--prepare-tab content -->
+                <div id="prepare-tab" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="relative-pos">
+                                <input type="text" id="grpName" class="form-textbox form-control" required="">
+                                <label for="grpName" class="form-label">Enter group or section name  </label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button id = "crtgrpbtn" class="btn btn-arrow primary-btn">Create group</button>
+                        </div>
+                        <div id="nameValidation" class="col-md-3" style="padding-top:10px; color:#a94442">
+                            Please enter the group name.
+                        </div>
+                    </div>
+                    <!-- expand collapse accordian -->
+                    <div id ="GroupPartialView" class="wrapper center-block">
+                     
+                    </div>
+                    <!-- expand collapse accordian end-->
+                </div>
+                <!--prepare-tab content end-->
+                <!-- perform-tab content -->
+                @*<div id="perform-tab" class="tab-pane fade">
+                    <h3>Menu 2</h3>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                </div>
+                <!-- perform-tab content end -->
+                <!-- win-tab content -->
+                <div id="win-tab" class="tab-pane fade">
+                    <h3>Menu 2</h3>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                </div>*@
+                <!-- win-tab content end -->
+            </div>
+        </div>
+        <!-- Face-to-face tab content end-->
+        <!-- Telephonic tab content -->
+        @*<div id="Telephonic-tab" class="tab-pane fade">
+            <h3>Menu 1</h3>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <!-- Telephonic tab content end-->
+        <!-- Video-conference tab content -->
+        <div id="Video-conference-tab" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>*@
+        <!-- Video-conference tab content end -->
+    </div>
+</div>
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+
+    var getGroups = function (stageId) {
+        var data = { stageId: stageId };
+        $.ajax({
+            url: 'Home/GetGroups/',
+            type: 'GET',
+            data: data,
+            contentType: 'application/html',
+            //data: JSON.stringify(model),
+            success: function (content) {
+                $('#GroupPartialView').html(content);
+            },
+            error: function (e) { }
+        });
+    }
+    $(document).ready(function () {
+        $('#nameValidation').hide();
+        var activeInterviewType = $('#interviewStages .active a').data('stageid');
+        getGroups(activeInterviewType);
+        $('#interviewStages a').on('click', function () {
+            activeInterviewType = $(this).data('stageid')
+            getGroups(activeInterviewType);
+        });
+        $('#grpName').on('change', function () {
+            if (grpName != "") {
+                $('#nameValidation').hide();
+            }
+        });
+        $('#crtgrpbtn').on('click', function () {
+            var grpName = $('#grpName').val();
+            if (grpName == "") {
+                $('#nameValidation').show();
+                return false;
+            }
+            else
+            {
+                $('#nameValidation').hide();
+            }
+            var data = { StageId: activeInterviewType, GroupName: grpName }
+            $.ajax({
+                url: 'Home/AddGroup/',
+                type: 'POST',
+                data: data,
+                //contentType: 'application/Json',
+                //data: JSON.stringify(model),
+                success: function (content) {
+                    alert("group is created !!");
+                    getGroups(activeInterviewType);
+                },
+                error: function (e) { }
+            });
+
+        });
+    });
+
+</script>
+

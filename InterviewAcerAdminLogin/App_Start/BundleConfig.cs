@@ -32,6 +32,9 @@ namespace InterviewAcerAdminLogin
                       "~/css/bootstrap.min.css",
                       "~/css/main.css",
                       "~/css/font-awesome.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/main").Include(
+            "~/Scripts/main.js"));
         }
     }
 }

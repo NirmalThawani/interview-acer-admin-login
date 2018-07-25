@@ -19,7 +19,13 @@ body{
     font-family: "Avenir-Book";
     src: url("../fonts/Avenir-Book.ttf");
 }
-
+@font-face {
+    font-family: "Avenir-Medium";
+    src: url("../fonts/Avenir-Medium.ttf");
+}
+.Avenir-Medium{
+    font-family: "Avenir-Medium";
+}
 
 .Avenir-Heavy{
    font-family: "Avenir-Heavy";
@@ -67,7 +73,7 @@ p{
     color:#f31616;
 }
 .f-blue{
-    color:#0F579F;
+    color:#0B0BF2;
 }
 .f-green{
     color: #569455;
@@ -106,7 +112,9 @@ p{
 .caps{
 	text-transform:uppercase;
 }
-
+.capitalize{
+    text-transform: capitalize;
+}
 /* font-size */
 .f-12{
 	font-size:12px;
@@ -258,6 +266,9 @@ p{
 .m-r-15{
     margin-right:15px;
  }
+ .m-r-20{
+    margin-right:20px;
+ }
  .m-r-10{
      margin-right:10px;
   }
@@ -317,6 +328,7 @@ p{
     border:0;
     border-bottom:1px solid #E6E6E6;
     border-radius: 2px;
+    background: transparent;
 }
 label{
 	margin-bottom:3px;
@@ -395,7 +407,9 @@ label{
     float: left;
     margin-top: 3px;
 }
-
+.relative-pos{
+    position: relative;
+}
 /*PRIMARY BTN*/
 .primary-btn, .primary-btn:focus, .primary-btn:hover{
 	background:#0B0BF2;
@@ -464,7 +478,8 @@ button {
 
 /* CUSTOM RADIO*/
 .radio{
-	margin-bottom:5px;
+    margin-bottom:5px;
+    display: inline-block;
 }
 input[type="radio"] {
   visibility:hidden;
@@ -489,7 +504,7 @@ input[type="radio"] + label span {
   border: solid 1px #3c3c3c;
 }
 input[type="radio"]:checked + label span {
-  background-color: #e3593f;
+  background-color: #0b0bf2;
   border: solid 1px #3c3c3c;
 }
 input[type="radio"]:checked + label span i{
@@ -575,7 +590,7 @@ input[type="radio"]:checked + label span {
 	font-weight:500 !important;
 	font-size:14px;
     line-height: 24px;
-    padding:0 20px;
+    padding:6px 20px;
     letter-spacing: 1px;
 }
 .btn:hover{
@@ -644,6 +659,9 @@ select::-ms-expand {
     margin:100px auto 0;
     border-radius: 4px;
     width:350px;
+}
+.login-form .form-control{
+    padding: 6px 12px 6px 0;
 }
 .login-user-avatar{
 	background: #e4e4e4;
@@ -815,30 +833,6 @@ ul li a:hover{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*FIXED HEADER AND SIDEBAR*/
 .left_col {
     background: #fff;
@@ -952,7 +946,8 @@ ul li a:hover{
     margin-bottom: 0;
     width: 100%;
     position: relative;
-    height:73px;
+    height:90px;
+    padding: 28px 28px 0 40px;
 }
 .nav-md .container.body .col-md-3.left_col {
     min-height: 100%;
@@ -964,15 +959,28 @@ ul li a:hover{
     z-index: 999;
 
 }
+.dashboard-title-wrapper{
+    background: #fff;
+    margin: -30px -40px 0 -40px;
+    padding: 30px 40px 0 40px;
+}
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
     height: 100%;
     position: fixed;
-    top:73px;
+    top:0;
+}
+.main-container{
+    margin-left: 240px;
 }
 .nav-md .container.body .right_col {
-    padding: 100px 30px 50px;
-    margin-left: 240px;
+    padding: 90px 0 0;
     background: #fff;
+    height:100vh;
+}
+.dashboard{
+    padding: 30px 40px;
+    background: #FBFBFB;
+    height:100%;
 }
 .nav-sm .toggle a span{
 	display:none;
@@ -981,26 +989,21 @@ ul li a:hover{
     width: 240px;
     float: left;
     border-radius: 0;
-    height: 73px;
+    height: 90px;
 }
 .navbar-nav>li>a,
 .navbar-brand,
 .navbar-nav>li>a {
     color: #fff !important
 }
-.top_nav .nav>li>a:focus,
-.top_nav .nav>li>a:hover,
-.top_nav .nav .open>a,
-.top_nav .nav .open>a:focus,
-.top_nav .nav .open>a:hover {
-    background: #f6f7fa;
-}
+
 .main_container .top_nav {
     display: block;
     position: fixed;
-    width: 100%;
+    width:calc(100% - 240px);
     left: 0;
     z-index: 99;
+    margin-left:240px;
 }
 .no-padding {
     padding: 0 !important
@@ -1046,14 +1049,19 @@ ul li a:hover{
 }
 .nav.side-menu>li>a {
     margin-bottom: 0;
+
 }
 .nav.side-menu>li.active>a,
-.nav.side-menu>li>a:hover,
-.nav>li>a:focus,
+.nav.side-menu>li>a:focus,
 .nav.side-menu>li>a:hover i,
 .nav>li>a:focus i {
-    
-    color: #9B9B9B;
+    border-left:8px solid #0c0af3; 
+    color: #1315b5;
+    font-family: "Avenir-Heavy";
+}
+.nav.side-menu>li>a:hover{
+    border-left:8px solid #0c0af3; 
+    color: #1315b5;
 }
 .nav.child_menu {
     display: none;
@@ -1076,7 +1084,7 @@ ul li a:hover{
     right: auto;
     width: 8px;
     z-index: 1;
-    border-radius: 50%;
+    border-radius: 50%; 
 }
 .nav-md ul.nav.child_menu li:after {
     border-left: 1px solid #E7E7E7;
@@ -1089,8 +1097,8 @@ ul li a:hover{
 .nav.side-menu>li>a,
 .nav.child_menu>li>a {
     font-size:16px;
-    color:#fff;
-    border-left: 10px solid transparent;
+    color:#9B9B9B ;
+    border-left:8px solid transparent;
 }
 .nav.child_menu li li:hover,
 .nav.child_menu li li.active {
@@ -1103,11 +1111,9 @@ ul li a:hover{
 .nav>li>a {
     position: relative;
     display: block;
-    padding: 20px 15px;
+    padding: 12px 15px 12px 20px;   
 }
-.top_nav .nav>li>a{
-    padding:20px 15px;
-}
+
 .nav.side-menu>li>a i{
     font-size: 20px;
     padding-right: 7px;
@@ -1250,3 +1256,150 @@ ul.msg_list li {
 
 
 
+/* Admin home page */
+.admin-logo{
+    width:125px;
+    margin: 25px 0px 0 15px;
+}
+.user-login{
+    width:150px;
+    text-align: right;
+}
+.dashboard-heading{
+    width:calc(100% - 150px);
+}
+.user-login .user-img{
+    width:32px;
+    height:32px;
+    border-radius: 100%;
+    border:1px solid #b6c8d8;
+    margin-left: 10px;
+
+}
+.dashboard-title{
+    font-size: 32px;
+    color: #333333;
+    font-family: "Avenir-Heavy";
+    margin-right:40px;
+}
+.page-title{
+    font-size: 20px;
+    color:#4A4A4A;
+    font-family: "Avenir-Medium";
+}
+.custom-nav-tab{
+    display: inline-block;
+    vertical-align: middle;
+    border-bottom: 0;
+}
+.custom-nav-tab.nav-tabs>li>a:hover{
+    border-color:transparent;
+    border-bottom: 6px solid #0B0BF2;
+    color:#0B0BF2;
+
+}
+.subcustom-nav-tab.custom-nav-tab.nav>li>a{
+    font-size: 20px;
+}
+.custom-nav-tab.nav>li>a{
+    padding: 10px 0 10px 0;
+    border:0;
+    border-bottom: 6px solid transparent;
+    font-size: 24px;
+    color: #4A4A4A;
+    margin-right:40px;
+}
+.custom-nav-tab.nav-tabs>li.active>a,.custom-nav-tab.nav-tabs>li.active>a:focus,.custom-nav-tab.nav-tabs>li.active>a:hover
+,.custom-nav-tab.nav-tabs>li>a:focus{
+    border:0;
+    border-bottom: 6px solid #0B0BF2 ;
+    color:#0B0BF2;
+    font-family: "Avenir-Heavy"; 
+}
+/* Admin home page end */
+
+
+/* accordian css */
+.custom-accordian .panel-title>.accordian-title{
+	display:block;
+	padding:10px 70px 10px 15px;
+  color:#555;
+  font-size:16px;
+  font-weight:bold;
+	text-transform:uppercase;
+	letter-spacing:1px;
+  word-spacing:3px;
+    text-decoration:none;
+    position: relative;
+    
+}
+.custom-accordian .panel-heading  .up-down-arrow:before {
+   font-family: 'FontAwesome';
+   content: "\f107";
+   position: absolute;
+   top:15px;
+   right:25px;
+   transition: all 0.5s;
+   font-size: 28px;
+   font-weight: 100;
+}
+.custom-accordian .panel-heading.active .up-down-arrow:before {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.custom-accordian .panel{
+    border-color: transparent;
+    margin-bottom: 15px;
+    border-radius: 0;
+} 
+.custom-accordian .panel-heading{
+    padding:0;
+    background: #fff;
+    border-color: transparent;
+    height:55px;
+    position: relative;
+}
+.crud-wrapper{
+    display: none; 
+    position: absolute;
+    top: 10px;
+    right: 70px;
+    height: 30px;
+}
+.custom-accordian .panel-heading:hover .crud-wrapper{
+    display: inline-block;
+}
+.custom-accordian .panel-heading.active .crud-wrapper{
+    display: inline-block;
+}
+.icon-width{
+    width:15px;
+    cursor: pointer;
+}
+/* accordian css end */
+
+
+/* select drop down css */
+.custom-select-dropdown{
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url('../images/dropdown.png')no-repeat right top; 
+    padding:6px 25px 6px 12px;
+    width:auto;
+    border-color:transparent;
+    margin-left: -12px;
+}
+.custom-select-dropdown.form-control:focus{
+    border-color:transparent;
+}
+
+.display-inline{
+    display: inline-block;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}

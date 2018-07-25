@@ -1,9 +1,61 @@
-﻿@{
+﻿@model IEnumerable<InterviewAcerAdminLogin.ViewModel.Stages>
+
+@{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>Successfull Login !!</h1>
+@Styles.Render("~/bundles/logincss")
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav>
+            <div class="dashboard-heading pull-left">
+                <span class="dashboard-title">Checklists for</span>
+                <ul id="interviewTypes" class="nav nav-tabs custom-nav-tab">
+                    <li class="active"><a data-toggle="tab" data-interviewTypeId=1 >Face-to-face</a></li>
+                    <li><a data-toggle="tab" data-interviewTypeId=2 >Telephonic</a></li>
+                    <li><a data-toggle="tab" data-interviewTypeId=3 >Video conference</a></li>
+                </ul>
+            </div>
+            <div class="user-login pull-right">
+                <span class="f-16 f-normal"><img src="images/default-user.png" class="user-img" /></span>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- TOP NAV END -->
+<!-- DASHBOARD-->
+<div id="divPartialViewContainer" class="right_col">
 
 </div>
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+
+    var getStages = function (interviewType) {
+        var data = { interviewType: interviewType };
+        $.ajax({
+            url: 'Home/GetStages/',
+            type: 'GET',
+            data: data,
+            contentType: 'application/html',
+            //data: JSON.stringify(model),
+            success: function (content) {
+                $('#divPartialViewContainer').html(content);
+            },
+            error: function (e) { }
+        });
+    }
+    $(document).ready(function () {
+        
+        var activeInterviewType = $('#interviewTypes .active a').data('interviewtypeid');
+        getStages(activeInterviewType);
+        $('#interviewTypes a').on('click', function () {
+            activeInterviewType = $(this).data('interviewtypeid')
+            getStages(activeInterviewType);
+        });
+       
+    });
+
+</script>
+
 

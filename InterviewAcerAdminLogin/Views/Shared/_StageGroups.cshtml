@@ -1,0 +1,213 @@
+﻿@model IEnumerable<InterviewAcerAdminLogin.Common.ResponseClasses.GroupDetails>
+
+<div class="panel-group custom-accordian m-t-30" id="accordion" role="tablist" aria-multiselectable="true">
+    <!-- first accordian -->
+    @foreach (var group in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading active" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" class="up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href=@("#" + group.Name) aria-expanded="true" aria-controls="collapseOne">
+                        <span class="m-t-10 display-inline">@group.Name</span>
+                    </a>
+                    <div class="crud-wrapper">
+                        <span onclick="document.getElementById('openFile').click();" class="f-blue capitalize m-r-20 cursor-pointer browse-file" for="excelFile">
+                            <img src="~/images/upload-file.png" class="icon-width"  /> Import data
+                        </span>
+                        @*<label class="m-r-10 browse-file" for="excelFile">
+                            <p class="m-t-5"><img src="~/Image/open-folder.png" class="m-r-10 m-b-5" />Browse..</p>
+                        </label>*@
+                        <input type="file" style="display:none" name="excelFile" id="openFile"  accept=".xls,.xlsx" />
+                       
+                        <span class="capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/download.png" class="icon-width" />
+                            <select class="form-control custom-select-dropdown">
+                                <option>download</option>
+                                <option>Export Template</option>
+                                <option>Export Data</option>
+                            </select>
+                        </span>
+                        <img src="~/images/Edit.png" class="icon-width m-r-20" />
+                        <img src="~/images/Trash.png" class="icon-width" />
+                    </div>
+                    <div class="clearfix"></div>
+                </h4>
+            </div>
+            <div id=@group.Name class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <ul>
+                                @foreach (var checkList in group.GroupCheckList)
+                                {
+                                    <li>
+                                        <div class="col-md-10">
+                                            <div class="radio">
+                                                <input id="first-rd" name="gender" type="radio" value="">
+                                                <label for="first-rd" class="f-bold">
+                                                    <span><i></i></span> @checkList.Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="pull-right m-t-10"> @checkList.Points</span>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                    </li>
+                                }
+
+                                @*<li>
+                                        <div class="radio">
+                                            <input id="second-rd" name="gender" type="radio" value="">
+                                            <label for="second-rd" class="f-bold">
+                                                <span><i></i></span>Shoes are shined
+                                            </label>
+                                        </div>
+                                        <span class="pull-right m-t-10">5 Points</span>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                    <li>
+                                        <div class="radio">
+                                            <input id="third-rd" name="gender" type="radio" value="">
+                                            <label for="third-rd" class="f-bold">
+                                                <span><i></i></span>Shirt is ironed & clean
+                                            </label>
+                                        </div>
+                                        <span class="pull-right m-t-10">12 Points</span>
+                                        <div class="clearfix"></div>
+                                    </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- first accordian end-->
+    <!-- second accordian -->
+    @*<div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a role="button" class="up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <span class="m-t-10 display-inline">Travel</span>
+                        <div class="clearfix"></div>
+                    </a>
+                    <div class="crud-wrapper">
+                        <span class="f-blue capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/upload-file.png" class="icon-width" /> Import data
+                        </span>
+                        <span class="capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/download.png" class="icon-width" />
+                            <select class="form-control custom-select-dropdown">
+                                <option>download</option>
+                                <option>Export Template</option>
+                                <option>Export Data</option>
+                            </select>
+                        </span>
+                        <img src="~/images/Edit.png" class="icon-width m-r-20" />
+                        <img src="~/images/Trash.png" class="icon-width" />
+                    </div>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>*@
+    <!-- second accordian end-->
+    <!-- third accordian -->
+    @*<div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a role="button" class="up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <span class="m-t-10 display-inline">Company</span>
+                        <div class="clearfix"></div>
+                    </a>
+                    <div class="crud-wrapper">
+                        <span class="f-blue capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/upload-file.png" class="icon-width" /> Import data
+                        </span>
+                        <span class="capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/download.png" class="icon-width" />
+                            <select class="form-control custom-select-dropdown">
+                                <option>download</option>
+                                <option>Export Template</option>
+                                <option>Export Data</option>
+                            </select>
+                        </span>
+                        <img src="~/images/Edit.png" class="icon-width m-r-20" />
+                        <img src="~/images/Trash.png" class="icon-width" />
+                    </div>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>*@
+    <!-- third accordian end-->
+</div>
+<script>
+    $(document).ready(function () {
+        $('#openFile').on('change', function () {
+            if ($("#openFile").val() != "") {
+                var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
+                /*Checks whether the file is a valid excel file*/
+                if (!regex.test($("#openFile").val().toLowerCase())) {
+                    alert("Please upload a valid Excel file!");
+                    return false;
+                }
+                else {
+                    UploadSelectedExcelsheet();
+                }
+            }
+            else {
+                alert("Please upload a Excel file!");
+                return false;
+            }
+        });
+    });
+    function UploadSelectedExcelsheet() {
+        var data = new FormData();
+        var i = 0;
+        var fl = $("#openFile").get(0).files[0];
+
+        if (fl != undefined) {
+
+            data.append("file", fl);
+
+        }
+    
+
+        $.ajax({
+            type: "POST",
+            url: 'Home/UploadExcelsheet/',
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (result) {
+
+                //$("#Products").html(result);
+
+                //$('.ddlRecipient').multiselect({
+                //    includeSelectAllOption: true
+                //});
+                //$('.ddlOccasionmaster').multiselect({
+                //    includeSelectAllOption: true
+                //});
+
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                if (xhr.responseText && xhr.responseText[0] == "{")
+                    err = JSON.parse(xhr.responseText).Message;
+                alert(err);
+                return false;
+            }
+        });
+    }
+</script>
