@@ -47,5 +47,23 @@ namespace InterviewAcerAdminLogin.Service
         {
            return await _stagerepository.SaveGroup(saveGroupRequest, token);
         }
+
+        public async Task<HttpResponseMessage> AddUpdateCheckList(List<AddUpdateCheckList> requestObject, string token)
+        {
+            return await _stagerepository.SaveCheckList(requestObject, token);
+        }
+
+        public async Task<List<CheckLisDetails>> GetCheckList(int groupId, string token)
+        {
+            var response = await _stagerepository.GetRequest("api/GetCheckList", "?groupId=" + groupId, token);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return await response.Content.ReadAsAsync<List<CheckLisDetails>>(new[] { new JsonMediaTypeFormatter() });
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

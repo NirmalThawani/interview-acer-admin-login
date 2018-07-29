@@ -8,9 +8,9 @@ using LinqToExcel;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -55,6 +55,89 @@ namespace InterviewAcerAdminLogin.Controllers
             }
             return PartialView("~/Views/Shared/_InterviewStages.cshtml", stageList);
         }
+        
+        
+        public async Task<ActionResult> GetCheckListExcel(int groupId, bool isTemplateOnly)
+        {
+            try
+            {
+                var checkListDTOList = await _stageService.GetCheckList(groupId, _tokenContainer.ApiToken.ToString());
+
+                Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                excel.Workbooks.Add();
+
+                // Create Worksheet from active sheet
+                Microsoft.Office.Interop.Excel._Worksheet workSheet = excel.ActiveSheet;
+                string fileFullPath = string.Empty;
+
+                try
+                {
+                    // ------------------------------------------------
+                    // Creation of header cells
+                    // ------------------------------------------------
+                    workSheet.Cells[1, "A"] = "CheckListId";
+                    workSheet.Cells[1, "B"] = "CheckListDescription";
+                    workSheet.Cells[1, "C"] = "CheckListScore";
+
+                    // ------------------------------------------------
+                    // Populate sheet 
+                    // ------------------------------------------------
+                    if(checkListDTOList != null && !isTemplateOnly)
+                    {
+                        int row = 2; // start row (in row 1 are header cells)
+                        foreach (CheckLisDetails checkListItem in checkListDTOList)
+                        {
+                            workSheet.Cells[row, "A"] = checkListItem.CheckListId;
+                            workSheet.Cells[row, "B"] = checkListItem.Name;
+                            workSheet.Cells[row, "C"] = checkListItem.Points;
+
+                            row++;
+                        }
+                    }
+                  
+
+                    // Apply some predefined styles for data to look nicely
+                    workSheet.Range["A1"].AutoFormat(Microsoft.Office.Interop.Excel.XlRangeAutoFormat.xlRangeAutoFormatClassic1);
+
+                    // Define filename
+                    fileFullPath = Server.MapPath("~/CheckListExcelDocuments/ExcelData"+ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss")+".xlsx");
+
+                    // Save this data as a file
+                    workSheet.SaveAs(fileFullPath);
+
+                    
+                    return File(fileFullPath, "application/vnd.ms-excel", "CheckListData.xlsx");
+                }
+                catch (Exception exception)
+                {
+                    throw exception;
+                }
+                finally
+                {
+                    // Quit Excel application
+                    excel.Quit();
+
+                    // Release COM objects (very important!)
+                    if (excel != null)
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+
+                    if (workSheet != null)
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(workSheet);
+
+                    // Empty variables
+                    excel = null;
+                    workSheet = null;
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+          
+        }
+                
 
         public async Task<PartialViewResult> GetGroups(int stageId)
         {
@@ -84,82 +167,78 @@ namespace InterviewAcerAdminLogin.Controllers
             }
         }
 
-        //public void UploadExcelsheet()
-        //{
-        //    if (Request.Files.Count > 0)
-        //    {
-        //        var file = Request.Files[0];
-        //        //List<ProductModel> _lstProductMaster = new List<ProductModel>();
-        //        string filePath = string.Empty;
-        //        if (file.ContentType == "application/vnd.ms-excel" || file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        //        {
-        //            try
-        //            {
-        //                string path = Server.MapPath("~/CheckListExcelDocuments/");
-        //                if (!Directory.Exists(path))
-        //                {
-        //                    Directory.CreateDirectory(path);
-        //                }
-        //                filePath = path + Path.GetFileName("ProductUploadSheet-" + DateTime.Now.ToString("dd-MMM-yyyy-HH-mm-ss-ff") + Path.GetExtension(file.FileName));
-        //                string extension = Path.GetExtension("ProductUploadSheet-" + DateTime.Now.ToString("dd-MMM-yyyy-HH-mm-ss-ff") + Path.GetExtension(file.FileName));
-        //                file.SaveAs(filePath);
-        //                var connectionString = "";
-        //                switch (extension)
-        //                {
-        //                    case ".xls": //Excel 97-03.
-        //                        connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", filePath);
-        //                        break;
-        //                    case ".xlsx": //Excel 07 and above.
-        //                        connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", filePath);
-        //                        break;
-        //                }
+        public async Task<bool> UploadExcelsheet()
+        {
+            bool uploadWasSuccessfull = false;
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+                var selectedGroupId = Request["groupId"].ToString();
+                //List<ProductModel> _lstProductMaster = new List<ProductModel>();
+                string filePath = string.Empty;
+                if (file.ContentType == "application/vnd.ms-excel" || file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+                    try
+                    {
+                        int groupId = 0;
+                        string path = Server.MapPath("~/CheckListExcelDocuments/");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        filePath = path + Path.GetFileName(Path.GetFileNameWithoutExtension(file.FileName) + "-" + DateTime.Now.ToString("dd-MMM-yyyy-HH-mm-ss-ff") + Path.GetExtension(file.FileName));
+                        string extension = Path.GetExtension(Path.GetFileNameWithoutExtension(file.FileName) + "-" + DateTime.Now.ToString("dd-MMM-yyyy-HH-mm-ss-ff") + Path.GetExtension(file.FileName));
+                        file.SaveAs(filePath);
+                        var connectionString = "";
+                        switch (extension)
+                        {
+                            case ".xls": //Excel 97-03.
+                                connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", filePath);
+                                break;
+                            case ".xlsx": //Excel 07 and above.
+                                connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", filePath);
+                                break;
+                        }
 
-        //                var excelFile = new ExcelQueryFactory(filePath);
-        //                var artistAlbums = from a in excelFile.Worksheet("Sheet1") select a;
+                        var excelFile = new ExcelQueryFactory(filePath);
+                        var workSheets = excelFile.GetWorksheetNames();
+                        var checkListItemSheet = from a in excelFile.Worksheet<CheckListExcelModel>(workSheets.First()) select a;
+                        var checkListRequestList = new List<AddUpdateCheckList>();
+                        foreach (var checkListItemRow in checkListItemSheet)
+                        {
 
-        //                foreach (var a in artistAlbums)
-        //                {
+                            int checkListScore = 0;
+                            int CheckListId = 0;
+                            int.TryParse(checkListItemRow.CheckListId, out CheckListId);
+                            if (int.TryParse(checkListItemRow.CheckListScore, out checkListScore) && !string.IsNullOrEmpty(checkListItemRow.CheckListDescription)
+                                && !string.IsNullOrEmpty(checkListItemRow.CheckListScore) && int.TryParse(checkListItemRow.CheckListScore, out checkListScore) && int.TryParse(selectedGroupId, out groupId))
+                            {
+                                AddUpdateCheckList item = new AddUpdateCheckList()
+                                {
+                                    CheckListId = CheckListId,
+                                    CheckListDescription = checkListItemRow.CheckListDescription,
+                                    CheckListScore = checkListScore,
+                                    GroupId = groupId
+                                };
+                                checkListRequestList.Add(item);
+                            }
 
-        //                }
+                        }
 
-        //                //using (OleDbConnection connExcel = new OleDbConnection(connectionString))
-        //                //{
-        //                //    using (OleDbCommand cmdExcel = new OleDbCommand())
-        //                //    {
-        //                //        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-        //                //        {
-        //                //            DataTable dt = new DataTable();
-        //                //            cmdExcel.Connection = connExcel;
+                        var response = await _stageService.AddUpdateCheckList(checkListRequestList, _tokenContainer.ApiToken.ToString());
 
-        //                //            Get the name of First Sheet.
-        //                //            connExcel.Open();
-        //                //            DataTable dtExcelSchema;
-        //                //            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-        //                //            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-        //                //            connExcel.Close();
-
-        //                //            Read Data from First Sheet.
-        //                //            connExcel.Open();
-        //                //            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-        //                //            odaExcel.SelectCommand = cmdExcel;
-        //                //            odaExcel.Fill(dt);
-        //                //            connExcel.Close();
-        //                //            if (dt.Rows.Count > 0)
-        //                //            {
-
-        //                //            }
-
-        //                //        }
-        //                //    }
-        //                //}
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                throw e;
-        //            }
-
-        //        }
-        //    }
-        //}
+                        if (response.IsSuccessStatusCode)
+                        {
+                            uploadWasSuccessfull = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+            }
+            return uploadWasSuccessfull;
+        }
     }
 }

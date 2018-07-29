@@ -4,4 +4,3 @@ W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\x86\
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\bin\x86\Debug\Newtonsoft.Json.xml
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\x86\Debug\InterviewAcerAdminLogin.Common.dll
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\x86\Debug\InterviewAcerAdminLogin.Common.pdb
-W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin.Common\obj\x86\Debug\InterviewAcerAdminLogin.Common.csprojResolveAssemblyReference.cache
