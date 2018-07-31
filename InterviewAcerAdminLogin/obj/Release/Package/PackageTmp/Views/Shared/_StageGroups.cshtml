@@ -1,0 +1,162 @@
+﻿@model IEnumerable<InterviewAcerAdminLogin.Common.ResponseClasses.GroupDetails>
+
+<div class="panel-group custom-accordian m-t-30" id="accordion" role="tablist" aria-multiselectable="true">
+    <!-- first accordian -->
+    @foreach (var group in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" class="up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href=@("#" + group.Name) aria-expanded="true" aria-controls="collapseOne">
+                        <span class="m-t-10 display-inline">@group.Name</span>
+                    </a>
+                    <div class="crud-wrapper">
+                        <span onclick="$('[data-val ='+ @group.GroupId + ']').click();" class="f-blue capitalize m-r-20 cursor-pointer browse-file" for="excelFile">
+                            <img src="~/images/upload-file.png" class="icon-width" /> Import data
+                        </span>
+                        @*<label class="m-r-10 browse-file" for="excelFile">
+                                <p class="m-t-5"><img src="~/Image/open-folder.png" class="m-r-10 m-b-5" />Browse..</p>
+                            </label>*@
+                        
+                        <input data-val=@group.GroupId type="file" style="display:none" class="openFile" name="excelFile" accept=".xls,.xlsx" />
+
+                        <span class="capitalize m-r-20 cursor-pointer">
+                            <img src="~/images/download.png" class="icon-width" />
+                            <select data-val=@group.GroupId  class="form-control custom-select-dropdown exportData">
+                                <option value="0">download</option>
+                                <option value="1">Export Template</option>
+                                <option value="2">Export Data</option>
+                            </select>
+                        </span>
+                        <img src="~/images/Edit.png" class="icon-width m-r-20" />
+                        <img src="~/images/Trash.png" class="icon-width" />
+                    </div>
+                    <div class="clearfix"></div>
+                </h4>
+            </div>
+            <div id=@group.Name class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <ul>
+                                @foreach (var checkList in group.GroupCheckList)
+                                {
+                                    <li>
+                                        <div class="col-md-10">
+                                            <div class="radio">
+                                                <input id="first-rd" name="gender" type="radio" value="">
+                                                <label for="first-rd" class="f-bold">
+                                                    <span><i></i></span> @checkList.Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="pull-right m-t-10"> @checkList.Points</span>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.openFile').on('change', function () {
+            if ($(this).val() != "") {
+                var validExtensions = ['xlsx','xls']; //array of valid extensions
+                var fileName = $(this).val().toLowerCase();
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
+                if ($.inArray(fileNameExt, validExtensions) == -1){
+                //if (!regex.test()) {
+                    alert("Please upload a valid Excel file!");
+                    return false;
+                }
+                else {
+                    var groupId = $(this).data('val');
+                    var fl = $(this).get(0).files[0];
+                    UploadSelectedExcelsheet(groupId, fl);
+                }
+            }
+            else {
+                alert("Please upload a Excel file!");
+                return false;
+            }
+        });
+        $(".exportData").on('change', function () {
+            var value = $(this).val();
+
+            if(value == "1")
+            {
+                var groupIdValue = $(this).data('val');
+                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue+"&isTemplateOnly=true";
+            }
+            if(value == "2")
+            {
+                var groupIdValue = $(this).data('val');
+                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue+"&isTemplateOnly=false";
+            }
+            $(this).val("0");
+        });
+        $("#accordion .panel-heading:first").addClass("active");
+
+        $("#accordion  .panel-collapse:first").addClass("in");
+
+        $('#accordion  .panel-heading a').click(function () {
+            $('#accordion .panel-heading').removeClass('active');
+
+            //If the panel was open and would be closed by this click, do not active it
+            if (!$(this).closest('.panel').find('.panel-collapse').hasClass('in'))
+                $(this).parents('.panel-heading').addClass('active');
+        });
+
+    });
+    function UploadSelectedExcelsheet(groupId, file) {
+        var data = new FormData();
+        var i = 0;
+
+
+        if (file != undefined) {
+            data.append("file", file);
+            data.append("groupId", groupId);
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: 'Home/UploadExcelsheet/',
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (data) {
+                var activeStageId = $('#interviewStages .active a').data('stageid');
+                $("#GroupPartialView").load('@(Url.Action("GetGroups", "Home",null, Request.Url.Scheme))?stageId=' + activeStageId);
+                if (data.toLowerCase() == 'true')
+                {
+                    alert("Checklist successfully added/updated.");
+                }
+                else
+                {
+                    alert("Some checklist were not added/updated. Please verify the excel data.");
+                }
+                $(".openFile").val('');
+            },
+            error: function (xhr, status, p3, p4) {
+                $(".openFile").val('');
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                if (xhr.responseText && xhr.responseText[0] == "{")
+                    err = JSON.parse(xhr.responseText).Message;
+                alert(err);
+                return false;
+            }
+        });
+    }
+</script>

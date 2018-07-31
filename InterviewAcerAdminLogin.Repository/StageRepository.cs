@@ -43,5 +43,14 @@ namespace InterviewAcerAdminLogin.Repository
             return response;
         }
 
+        public async Task<HttpResponseMessage> UpdateGroupName(UpdateGroupName requestObject, string token)
+        {
+            httpClient.DefaultRequestHeaders.Remove("Authorization");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            var uri = new Uri(ConfigurationManager.AppSettings["ApiBaseUrl"].ToString() + "api/UpdateGroupName");
+            var response = await httpClient.PostAsJsonAsync(uri, requestObject);
+            return response;
+        }
+
     }
 }

@@ -5,12 +5,14 @@ using InterviewAcerAdminLogin.Models;
 using InterviewAcerAdminLogin.Service;
 using InterviewAcerAdminLogin.ViewModel;
 using LinqToExcel;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -55,89 +57,241 @@ namespace InterviewAcerAdminLogin.Controllers
             }
             return PartialView("~/Views/Shared/_InterviewStages.cshtml", stageList);
         }
-        
-        
+
+        public static string ExcelContentType
+        {
+            get
+            { return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; }
+        }
+
+        public static byte[] ExportExcel(DataTable dataTable, bool isTemplateOnly)
+        {
+            byte[] result = null;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(String.Format("Sheet1"));
+                //int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
+                workSheet.Cells["A1"].Value = "CheckListId";
+                workSheet.Cells["B1"].Value = "CheckListDescription";
+                workSheet.Cells["C1"].Value = "CheckListScore";
+                workSheet.Column(1).AutoFit();
+                workSheet.Column(2).AutoFit();
+                workSheet.Column(3).AutoFit();
+
+                // format header - bold, yellow on black  
+                using (ExcelRange r = workSheet.Cells[1, 1, 1, 3])
+                {
+                    r.Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    r.Style.Font.Bold = true;
+                    r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
+                }
+
+                var startRowFrom = 2;
+                // autofit width of cells with small content  
+                if (!isTemplateOnly)
+                {
+                    // add the content into the Excel file  
+                    workSheet.Cells["A" + startRowFrom.ToString()].LoadFromDataTable(dataTable, false);
+                    int columnIndex = 1;
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        ExcelRange columnCells = workSheet.Cells[workSheet.Dimension.Start.Row, columnIndex, workSheet.Dimension.End.Row, columnIndex];
+                        int maxLength = columnCells.Max(cell => cell.Value.ToString().Count());
+                        if (maxLength < 150)
+                        {
+                            workSheet.Column(columnIndex).AutoFit();
+                        }
+
+
+                        columnIndex++;
+                    }
+
+                    // format cells - add borders  
+                    using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
+                    {
+                        r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        r.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                        r.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
+                        r.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
+                        r.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
+                        r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+                    }
+                }
+
+
+
+
+
+                result = package.GetAsByteArray();
+            }
+            return result;
+        }
+
+        public static DataTable ListToDataTable<T>(List<T> data)
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < properties.Count; i++)
+            {
+                PropertyDescriptor property = properties[i];
+                dataTable.Columns.Add(property.Name, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+            }
+
+            object[] values = new object[properties.Count];
+            foreach (T item in data)
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = properties[i].GetValue(item);
+                }
+
+                dataTable.Rows.Add(values);
+            }
+            return dataTable;
+        }
+
         public async Task<ActionResult> GetCheckListExcel(int groupId, bool isTemplateOnly)
         {
-            try
+            byte[] filecontent;
+            if (isTemplateOnly)
+            {
+                filecontent = ExportExcel(new DataTable(), isTemplateOnly);
+            }
+            else
             {
                 var checkListDTOList = await _stageService.GetCheckList(groupId, _tokenContainer.ApiToken.ToString());
-
-                Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-                excel.Workbooks.Add();
-
-                // Create Worksheet from active sheet
-                Microsoft.Office.Interop.Excel._Worksheet workSheet = excel.ActiveSheet;
-                string fileFullPath = string.Empty;
-
-                try
-                {
-                    // ------------------------------------------------
-                    // Creation of header cells
-                    // ------------------------------------------------
-                    workSheet.Cells[1, "A"] = "CheckListId";
-                    workSheet.Cells[1, "B"] = "CheckListDescription";
-                    workSheet.Cells[1, "C"] = "CheckListScore";
-
-                    // ------------------------------------------------
-                    // Populate sheet 
-                    // ------------------------------------------------
-                    if(checkListDTOList != null && !isTemplateOnly)
-                    {
-                        int row = 2; // start row (in row 1 are header cells)
-                        foreach (CheckLisDetails checkListItem in checkListDTOList)
-                        {
-                            workSheet.Cells[row, "A"] = checkListItem.CheckListId;
-                            workSheet.Cells[row, "B"] = checkListItem.Name;
-                            workSheet.Cells[row, "C"] = checkListItem.Points;
-
-                            row++;
-                        }
-                    }
-                  
-
-                    // Apply some predefined styles for data to look nicely
-                    workSheet.Range["A1"].AutoFormat(Microsoft.Office.Interop.Excel.XlRangeAutoFormat.xlRangeAutoFormatClassic1);
-
-                    // Define filename
-                    fileFullPath = Server.MapPath("~/CheckListExcelDocuments/ExcelData"+ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss")+".xlsx");
-
-                    // Save this data as a file
-                    workSheet.SaveAs(fileFullPath);
-
-                    
-                    return File(fileFullPath, "application/vnd.ms-excel", "CheckListData.xlsx");
-                }
-                catch (Exception exception)
-                {
-                    throw exception;
-                }
-                finally
-                {
-                    // Quit Excel application
-                    excel.Quit();
-
-                    // Release COM objects (very important!)
-                    if (excel != null)
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
-
-                    if (workSheet != null)
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(workSheet);
-
-                    // Empty variables
-                    excel = null;
-                    workSheet = null;
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
+                if (checkListDTOList != null && checkListDTOList.Any())
+                    filecontent = ExportExcel(ListToDataTable(checkListDTOList), isTemplateOnly);
+                else
+                    filecontent = ExportExcel(new DataTable(), true);
             }
-            catch(Exception e)
-            {
-                throw e;
-            }
-          
+            return File(filecontent, ExcelContentType, "CheckListData.xlsx");
         }
-                
+
+
+        //public async Task<ActionResult> GetCheckListExcel(int groupId, bool isTemplateOnly)
+        //{
+        //    try
+        //    {
+
+        //        var checkListDTOList = await _stageService.GetCheckList(groupId, _tokenContainer.ApiToken.ToString());
+
+        //        Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+        //        excel.Workbooks.Add();
+
+        //        // Create Worksheet from active sheet
+        //        Microsoft.Office.Interop.Excel._Worksheet workSheet = excel.ActiveSheet;
+        //        string fileFullPath = string.Empty;
+        //        writeLog("excel created");
+
+        //        try
+        //        {
+        //            // ------------------------------------------------
+        //            // Creation of header cells
+        //            // ------------------------------------------------
+        //            workSheet.Cells[1, "A"] = "CheckListId";
+        //            workSheet.Cells[1, "B"] = "CheckListDescription";
+        //            workSheet.Cells[1, "C"] = "CheckListScore";
+
+        //            writeLog("headers addded");
+
+        //            // ------------------------------------------------
+        //            // Populate sheet 
+        //            // ------------------------------------------------
+        //            if (checkListDTOList != null && !isTemplateOnly)
+        //            {
+        //                int row = 2; // start row (in row 1 are header cells)
+        //                foreach (CheckLisDetails checkListItem in checkListDTOList)
+        //                {
+        //                    workSheet.Cells[row, "A"] = checkListItem.CheckListId;
+        //                    workSheet.Cells[row, "B"] = checkListItem.Name;
+        //                    workSheet.Cells[row, "C"] = checkListItem.Points;
+
+        //                    row++;
+        //                }
+        //            }
+        //            writeLog("data added");
+
+        //            // Apply some predefined styles for data to look nicely
+        //            workSheet.Range["A1"].AutoFormat(Microsoft.Office.Interop.Excel.XlRangeAutoFormat.xlRangeAutoFormatClassic1);
+
+        //            writeLog("data formatted");
+        //            // Define filename
+        //            fileFullPath = Server.MapPath("~/Content/CheckListExcelDocuments/ExcelData" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss")+".xlsx");
+
+        //            writeLog("excel saved");
+
+        //            // Save this data as a file
+        //            workSheet.SaveAs(fileFullPath);
+
+
+        //            return File(fileFullPath, "application/vnd.ms-excel", "CheckListData.xlsx");
+        //        }
+        //        catch (Exception exception)
+        //        {
+        //            throw exception;
+        //        }
+        //        finally
+        //        {
+        //            // Quit Excel application
+        //            excel.Quit();
+
+        //            // Release COM objects (very important!)
+        //            if (excel != null)
+        //                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+
+        //            if (workSheet != null)
+        //                System.Runtime.InteropServices.Marshal.ReleaseComObject(workSheet);
+
+        //            // Empty variables
+        //            excel = null;
+        //            workSheet = null;
+        //            GC.Collect();
+        //            GC.WaitForPendingFinalizers();
+        //        }
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        throw e;
+        //    }
+
+        //}
+
+        //private void writeLog(string ex)
+        //{
+
+
+        //    StreamWriter log;
+
+        //    string _SitePath = System.IO.Path.Combine(System.Web.HttpContext.Current.Server.MapPath(@"~/Content/Log/"));
+        //    if(!Directory.Exists(_SitePath))
+        //    {
+        //        Directory.CreateDirectory(_SitePath);
+        //    }
+        //    _SitePath = _SitePath + "log.txt";
+        //    if (!System.IO.File.Exists(_SitePath))
+        //    {
+        //        log = new StreamWriter(_SitePath, true);
+        //    }
+        //    else
+        //    {
+        //        log = System.IO.File.AppendText(_SitePath);
+        //    }
+
+        //    log.WriteLine(DateTime.Now);
+
+        //    log.WriteLine(ex);
+
+        //    log.WriteLine();
+
+        //    log.Close();
+        //}
+
 
         public async Task<PartialViewResult> GetGroups(int stageId)
         {
@@ -181,7 +335,7 @@ namespace InterviewAcerAdminLogin.Controllers
                     try
                     {
                         int groupId = 0;
-                        string path = Server.MapPath("~/CheckListExcelDocuments/");
+                        string path = Server.MapPath("~/Content/CheckListExcelDocuments/");
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
@@ -239,6 +393,16 @@ namespace InterviewAcerAdminLogin.Controllers
                 }
             }
             return uploadWasSuccessfull;
+        }
+
+        public async Task<bool> UpdateGroupName(int groupId, string groupName)
+        {
+            var response = await _stageService.UpdateGroupName(new UpdateGroupName() { GroupId = groupId, GroupName = groupName }, _tokenContainer.ApiToken.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

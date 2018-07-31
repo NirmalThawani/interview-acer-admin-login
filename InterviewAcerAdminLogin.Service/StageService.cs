@@ -65,5 +65,10 @@ namespace InterviewAcerAdminLogin.Service
                 return null;
             }
         }
+
+        public async Task<HttpResponseMessage> UpdateGroupName(UpdateGroupName requestObject, string token)
+        {
+            return await _stagerepository.UpdateGroupName(requestObject, token);
+        }
     }
 }

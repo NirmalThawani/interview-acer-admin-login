@@ -84,6 +84,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestClasses\AddUpdateCheckList.cs" />
     <Compile Include="RequestClasses\SaveGroupRequest.cs" />
+    <Compile Include="RequestClasses\UpdateGroupName.cs" />
     <Compile Include="ResponseClasses\CheckLisDetails.cs" />
     <Compile Include="ResponseClasses\GroupDetails.cs" />
     <Compile Include="ResponseClasses\LoginResponse.cs" />

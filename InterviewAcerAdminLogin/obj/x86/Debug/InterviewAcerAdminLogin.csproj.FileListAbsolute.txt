@@ -57,3 +57,5 @@ W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\obj\x86\Debug\I
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\obj\x86\Debug\InterviewAcerAdminLogin.dll
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\obj\x86\Debug\InterviewAcerAdminLogin.pdb
 W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\obj\x86\Debug\InterviewAcerAdminLogin.csproj.ResolveComReference.cache
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\EPPlus.dll
+W:\InterviewAcer\InterviewAcerAdminLogin\InterviewAcerAdminLogin\bin\EPPlus.xml
