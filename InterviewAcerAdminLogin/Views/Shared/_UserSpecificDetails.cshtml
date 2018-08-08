@@ -1,0 +1,236 @@
+﻿@model InterviewAcerAdminLogin.Models.UserSpecificDetails
+<!-- DASHBOARD-->
+@Styles.Render("~/bundles/logincss")
+@Styles.Render("~/bundles/datatablecss")
+
+<div class="dashboard">
+    <div class="tab-content">
+        <!-- page header -->
+        <div class="dashboard-page-header">
+            <div class="customSelect-search pull-left m-t-10">
+                <a id="showAllUsers" href="#" class="f-gray ">
+                    <img src="~/images/back-arrow.png" class="icon-width m-r-15 m-b-5" />Back to list
+                </a>
+            </div>
+            <div class="pull-right customSelect-search">
+                <select class="selectpicker m-r-15 normalSelectDrop-down">
+                    <option>Edit</option>
+                    <option>Delete</option>
+                </select>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- page header end-->
+        <!-- user details -->
+        <div class="m-t-20 p-b-20">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="user-detail-card">
+                        <div class="userPic-header">
+                            <div class="user-profilePic m-r-20">
+                                <img id="userProfilePic" src="~/images/default-user.png" class="user-pic" />
+                            </div>
+                            <span class="f-24 userProfile-name">@Model.FullName</span>
+                        </div>
+                        <div class="userDetail-info">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <p class="f-gray">Email id</p>
+                                        <p>@Model.EmailAddress</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="f-gray">University Name</p>
+                                        <p>@Model.UniversityName</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="f-gray">Specialisation</p>
+                                        <p>@Model.Specialization</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="f-gray">Status</p>
+                                        <p class="f-blue">@Model.Status</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <p class="f-gray">Mobile Number</p>
+                                        <p>@Model.MobileNumber</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="f-gray">University code</p>
+                                        <p>@Model.UniversityCode</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="f-gray">Score obtained</p>
+                                        <p>@Model.AcadamicScore</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <!-- Ongoing interview -->
+                    <div class="interview-card text-center">
+                        <p class="Avenir-Heavy f-20 m-b-20">Ongoing interviews</p>
+                        <span class="Avenir-Heavy f-blue f-32">@Model.OngoingInterviews</span>
+                    </div>
+                    <!-- Ongoing interview end-->
+                    <!-- Closed interviews -->
+                    <div class="interview-card text-center card-left m-t-10 m-r-10">
+                        <p class="Avenir-Heavy f-20 m-b-20">Closed interviews</p>
+                        <span class="Avenir-Heavy f-blue f-32">04</span>
+                    </div>
+                    <!-- Closed interviews end-->
+                    <!-- Job offers -->
+                    <div class="interview-card text-center card-right m-t-10">
+                        <p class="Avenir-Heavy f-20 m-b-20">Job offers</p>
+                        <span class="Avenir-Heavy f-blue f-32">04</span>
+                    </div>
+                    <!-- Job offers end-->
+                    <div class="clearfix"></div>
+
+                    <!-- Points -->
+                    <div class="interview-card text-center card-left m-t-10 m-r-10">
+                        <p class="Avenir-Heavy f-20 m-b-20">Points</p>
+                        <p class="Avenir-Heavy f-orange f-32 m-b-20">@Model.TotalNumberOfPointsScored</p>
+                        <p>Total coins earn by user</p>
+                    </div>
+                    <!-- Points end-->
+                    <!-- Tasks completed -->
+                    <div class="interview-card text-center card-right m-t-10">
+                        <p class="Avenir-Heavy f-20 m-b-20">Tasks completed</p>
+                        <p class="Avenir-Heavy f-blue f-32 m-b-20">@Model.TotalNumberOfCheckListCompleted</p>
+                        <p>in @Model.OngoingInterviews interviews</p>
+                    </div>
+                    <!-- Tasks completed end-->
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+        </div>
+        <!-- user details end-->
+        <!-- scheduled  interviews table structure -->
+        <p class="page-title m-t-40">Scheduled interviews</p>
+        <table id="interviewDetails" class="table table-responsive table-striped m-t-20">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="form-group checkbox">
+                            <label class="f-14">
+                                <input type="checkbox" id="chk" name="chkTerms">
+                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+
+                            </label>
+
+                        </div>
+                    </td>
+                    <th>Name of company</th>
+                    <th>Designation</th>
+                    <th>Date</th>
+                    <th>Nature of interview</th>
+                    <th>Hiring manager</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var interview in Model.InterviewDetails)
+                    {
+                    <tr>
+                        <td>
+                            <div class="form-group checkbox">
+                                <label class="f-14">
+                                    <input type="checkbox" id="chk" name="chkTerms">
+                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+
+                                </label>
+
+                            </div>
+                        </td>
+                        <td>@interview.CompanyName</td>
+                        <td>@interview.Designation</td>
+                        <td>@interview.InterviewDate.ToString("dd/MM/yyyy")</td>
+                        <td>@interview.InterviewTypeName</td>
+                        <td>@interview.HiringIndividualName</td>
+                        <td>Active</td>
+                        <td>
+                            <div class="moreDots-wrapper">
+                                <img src="~/images/more_dots.png" class="cursor-pointer" />
+                                <div class="moreDots-content">
+                                    <ul>
+                                        <li>
+                                            <a href="#">
+                                                <img src="~/images/Edit.png" class="icon-width" />
+                                                <span>Edit</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="~/images/Trash.png" class="icon-width" />
+                                                <span>Delete</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+        <!-- scheduled  interviews table structure  end-->
+
+    </div>
+</div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/main")
+@Scripts.Render("~/bundles/datatable")
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            url: 'Users/GetProfilePicture?imagePath=' + '@Model.imagePath',
+            type: 'GET',
+            contentType: 'application/html',
+            success: function (content) {
+                $('#userProfilePic').attr('src', content);
+            },
+            error: function (e) { }
+        });
+        $('#interviewDetails').DataTable({
+            "dom": '', "columns": [
+         { "orderable": false },
+         { "orderable": false },
+         { "orderable": false },
+         null,
+          { "orderable": false },
+         { "orderable": false },
+         { "orderable": false },
+         { "orderable": false }
+            ], "order": [[3, 'desc']]
+        });
+
+        $('#showAllUsers').on('click', function () {
+            window.location.href = '@(Url.Action("Index", "Users",null, Request.Url.Scheme))'
+           
+            //$.ajax({
+            //    url: 'Users/GetAllUserDetails/',
+            //    type: 'GET',
+            //    contentType: 'application/html',
+            //    success: function (content) {
+            //        $('#divPartialViewContainer').html(content);
+            //    },
+            //    error: function (e) { }
+            //});
+        });
+      
+    });
+  
+</script>
+   
+ 
+

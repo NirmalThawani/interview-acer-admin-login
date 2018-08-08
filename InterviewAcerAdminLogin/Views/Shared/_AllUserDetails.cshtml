@@ -1,0 +1,190 @@
+﻿@model IEnumerable<InterviewAcerAdminLogin.Models.UserGeneralDetails>
+@Styles.Render("~/bundles/logincss")
+@Styles.Render("~/bundles/datatablecss")
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="dashboard">
+    <div class="tab-content">
+        <div class="dashboard-page-header">
+            <div class="customSelect-search pull-left">
+
+                <select class="selectpicker m-r-15" data-show-subtext="true" id="nameSearch" title="Name" data-live-search="true">
+                    <optgroup label="Recently searched">
+                        <option>Arya</option>
+                        <option>Nirmal </option>
+                        <option>Jhon</option>
+                    </optgroup>
+                </select>
+
+
+
+
+                <select class="selectpicker m-r-15" data-show-subtext="true" title="Email id" data-live-search="true">
+                    <optgroup label="Recently searched">
+                        <option>sansa@hotmail.com</option>
+                        <option>arya@hotmail.com</option>
+                        <option>Jhon@hotmail.com</option>
+                    </optgroup>
+                </select>
+
+
+                <select class="selectpicker m-r-15" data-show-subtext="true" title="University" data-live-search="true">
+                    <optgroup label="Recently searched">
+                        <option>Kilgore Trout</option>
+                        <option>Billy Pilgrim </option>
+                        <option>Dan Gregory</option>
+                    </optgroup>
+                </select>
+
+
+                <select class="selectpicker m-r-15" data-show-subtext="true" title="Status">
+                    <option>Active</option>
+                    <option>Inactive</option>
+                </select>
+            </div>
+            <div class="pull-right">
+                <button id="userExport" class="btn secondary-btn">Export <img src="images/download-arrow.png" class="icon-width" /></button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- table structure  -->
+        <table id="userDetails" class="table table-responsive table-striped sortable">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="form-group checkbox">
+                            <label class="f-14">
+                                <input type="checkbox" id="chk" name="chkTerms">
+                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+
+                            </label>
+
+                        </div>
+                    </th>
+                    <th>Name</th>
+
+                    <th>Email id</th>
+                    <th>Mobile number</th>
+                    <th>University name </th>
+                    <th>University code</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr data-userId="@user.UserId" style="cursor:pointer">
+                        <td>
+                            <div class="form-group checkbox">
+                                <label class="f-14">
+                                    <input type="checkbox" id="chk" name="chkTerms">
+                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+
+                                </label>
+
+                            </div>
+                        </td>
+                        <td>@user.FullName</td>
+                        <td>@user.EmailAddress</td>
+                        <td>@user.MobileNumber</td>
+                        <td>@user.UniversityName</td>
+                        <td class="caps">@user.UniversityCode</td>
+                        <td>@user.Status</td>
+                        <td>
+                            <div class="moreDots-wrapper">
+                                <img src="images/more_dots.png" class="cursor-pointer" />
+                                <div class="moreDots-content">
+                                    <ul>
+                                        <li>
+                                            <a href="#">
+                                                <img src="images/Edit.png" class="icon-width" />
+                                                <span>Edit</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="images/Trash.png" class="icon-width" />
+                                                <span>Delete</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <!-- table structure  end-->
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/main")
+@Scripts.Render("~/bundles/datatable")
+<script>
+
+    $(document).ready(function () {
+
+        $('#userDetails').DataTable({
+            "dom": '', "columns": [
+        { "orderable": false },
+        null,
+        { "orderable": false },
+        { "orderable": false },
+        null,
+        { "orderable": false },
+        { "orderable": false },
+        { "orderable": false }
+            ], "order": [[1, 'asc']], buttons: [{
+                extend: 'excel',
+                header: true,
+                filename: "users",
+                title: null,
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5, 6]
+                }
+            }]
+        });
+
+        $('#userExport').click(function () {
+            $('#userDetails').DataTable().button('0').trigger();
+        });
+
+        $('tr').on('click', function () {
+            var userIdForSelectedUser = $(this).data('userid');
+            if (userIdForSelectedUser) {
+                var data = { userId: userIdForSelectedUser };
+                $.ajax({
+                    url: 'Users/GetUserInformation/',
+                    type: 'GET',
+                    data: data,
+                    contentType: 'application/html',
+                    //data: JSON.stringify(model),
+                    success: function (content) {
+                        $('#divPartialViewContainer').html(content);
+
+
+
+                    },
+                    error: function (e) { }
+                });
+
+
+            }
+        });
+    });
+
+    $(window).load(function () {
+        $('select').on('change', function (e) {
+            $('#userDetails').DataTable().columns(1)
+                .search(this.value)
+                .draw();
+        });
+    });
+</script>
+
+
