@@ -11,28 +11,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin</title>
 </head>
+<style>
+    .paginate_button a {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
 
+    .previous a, .next a {
+        padding: 3px 8px !important;
+    }
+</style>
 
 <div class="container body">
     <!-- TOP NAV -->
     <div class="top_nav">
-        <div class="nav_menu">
-            <nav>
-                <div class="dashboard-heading pull-left">
-                    <span class="dashboard-title ">Users </span><span class="f-blue f-14 m-r-40">(@Model.Count())</span>
-                    <div class="count-wrapper">
-                        <ul>
-                            <li class="f-green"><span class="count-label">Active</span>: @Model.Count()</li>
-                            <li><span class="count-label">Inactive</span>: 0</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="user-login pull-right">
-                    <span class="f-16 f-normal"><img src="images/default-user.png" class="user-img" /></span>
-                </div>
-                <div class="clearfix"></div>
-            </nav>
-        </div>
+        @{Html.RenderPartial("~/Views/Shared/_UserDetailsHeader.cshtml");}     
     </div>
     <!-- TOP NAV END -->
     <!-- DASHBOARD-->
@@ -41,37 +34,76 @@
             <div class="tab-content">
                 <div class="dashboard-page-header">
                     <div class="customSelect-search pull-left">
+                        <div id="name-search-container" style="display:inline-block">
 
-                        <select class="selectpicker m-r-15" data-show-subtext="true" id="nameSearch" title="Name" data-live-search="true">
-                            <optgroup label="Recently searched">
-                                <option>Arya</option>
-                                <option>Nirmal </option>
-                                <option>Jhon</option>
-                            </optgroup>
-                        </select>
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="name-search" type="text" class="form-control customSearch-control" placeholder="name search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
+                            <div style="display:inline-block" class="dropdown search-dropDown">
+                                <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="selectedValue">Name</span>
+                                    <span class="caret"></span>
+                                </button>
 
+                                <div class="dropdown-menu customDropdown-menu">
 
+                                    <ul>
+                                        <li><a href="#">HTML</a></li>
+                                        <li><a href="#">CSS</a></li>
+                                        <li><a href="#">JavaScript</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div id="email-search-container" style="display:inline-block">
 
-                        <select class="selectpicker m-r-15" data-show-subtext="true" title="Email id" data-live-search="true">
-                            <optgroup label="Recently searched">
-                                <option>sansa@hotmail.com</option>
-                                <option>arya@hotmail.com</option>
-                                <option>Jhon@hotmail.com</option>
-                            </optgroup>
-                        </select>
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="email-search" type="text" class="form-control customSearch-control" placeholder="email search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
+                            <div style="display:inline-block" class="dropdown search-dropDown">
+                                <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="selectedValue">EmailId</span>
+                                    <span class="caret"></span>
+                                </button>
 
+                                <div class="dropdown-menu customDropdown-menu">
 
-                        <select class="selectpicker m-r-15" data-show-subtext="true" title="University" data-live-search="true">
-                            <optgroup label="Recently searched">
-                                <option>Kilgore Trout</option>
-                                <option>Billy Pilgrim </option>
-                                <option>Dan Gregory</option>
-                            </optgroup>
-                        </select>
+                                    <ul>
+                                        <li><a href="#">HTML</a></li>
+                                        <li><a href="#">CSS</a></li>
+                                        <li><a href="#">JavaScript</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div id="university-search-container" style="display:inline-block">
 
-                        <select class="selectpicker m-r-15" data-show-subtext="true" title="Status">
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="university-search" type="text" class="form-control customSearch-control" placeholder="university search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
+                            <div style="display:inline-block" class="dropdown search-dropDown">
+                                <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="selectedValue">University</span>
+                                    <span class="caret"></span>
+                                </button>
+
+                                <div class="dropdown-menu customDropdown-menu">
+
+                                    <ul>
+                                        <li><a href="#">HTML</a></li>
+                                        <li><a href="#">CSS</a></li>
+                                        <li><a href="#">JavaScript</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <select id="user-status" class="selectpicker m-r-15" style="display:inline-block" data-show-subtext="true" title="Status">
                             <option>Active</option>
                             <option>Inactive</option>
                         </select>
@@ -85,7 +117,7 @@
                 <table id="userDetails" class="table table-responsive table-striped sortable">
                     <thead>
                         <tr>
-                            <th>
+                            <td>
                                 <div class="form-group checkbox">
                                     <label class="f-14">
                                         <input type="checkbox" id="chk" name="chkTerms">
@@ -94,7 +126,7 @@
                                     </label>
 
                                 </div>
-                            </th>
+                            </td>
                             <th>Name</th>
 
                             <th>Email id</th>
@@ -166,8 +198,26 @@
 
     $(document).ready(function () {
 
+        $('#name-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
+                NameSearch($(this).val());
+            }
+        });
+
+        $('#email-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
+                EmailSearch($(this).val());
+            }
+        });
+
+        $('#university-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
+                UniversitySearch($(this).val());
+            }
+        });
+
         $('#userDetails').DataTable({
-            "dom": '', "columns": [
+            "dom": '<"uers-pagination"p>', "columns": [
         { "orderable": false },
         null,
         { "orderable": false },
@@ -184,7 +234,8 @@
                 exportOptions: {
                     columns: [1, 2, 3, 4, 5, 6]
                 }
-            }]
+            }],
+            "pageLength": 5
         });
 
         $('#userExport').click(function () {
@@ -194,29 +245,126 @@
         $('tr').on('click', function () {
             var userIdForSelectedUser = $(this).data('userid');
             if (userIdForSelectedUser) {
-                var data = { userId: userIdForSelectedUser };
-                $.ajax({
-                    url: 'Users/GetUserInformation/',
-                    type: 'GET',
-                    data: data,
-                    contentType: 'application/html',
-                    //data: JSON.stringify(model),
-                    success: function (content) {
-                        $('#divPartialViewContainer').html(content);
-                    },
-                    error: function (e) { }
-                });
+               window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)              
             }
         });
-    });
 
+        $('#userDetails').on('order.dt', function () {
+            $('tr').on('click', function () {
+                var userIdForSelectedUser = $(this).data('userid');
+                if (userIdForSelectedUser) {
+                    window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)
 
-
-    $(window).load(function () {
-        $('select').on('change', function (e) {
-            $('#userDetails').DataTable().columns(1)
-                .search(this.value)
-                .draw();
+                }
+            });
         });
+
+        $('#user-status').on('change', function () {
+            $('#userDetails').DataTable().columns(6).search($(this).val()).draw();
+        })
     });
+
+    var NameSearch = function (searchText) {
+        $('#userDetails').DataTable().columns(1).search(searchText).draw();
+        if (searchText != '') {
+            var arr = [];
+            if (sessionStorage.getItem('name-latest-search') === null) {
+                arr.unshift(searchText)
+            }
+            else {
+                var value = sessionStorage.getItem('name-latest-search');
+                arr = JSON.parse(value);
+                if (arr.indexOf(searchText) == -1)
+                    arr.unshift(searchText)
+            }
+            if (arr.length > 3) {
+                arr.splice(3, arr.length - 3);
+            }
+            sessionStorage.setItem('name-latest-search', JSON.stringify(arr));
+            $('#name-search-container .customDropdown-menu ul').html('');
+            for (var i = 0; i < arr.length; i++) {
+                $('#name-search-container .customDropdown-menu ul').append("<li><a href='#'>" + arr[i] + "</a></li>")
+            }
+
+            $("#name-search-container .customDropdown-menu li a").click(function () {
+                $("#name-search-container .customDropdown-toggle .selectedValue").text($(this).text());
+                $("#name-search-container .customDropdown-toggle .selectedValue").val($(this).text());
+                $('#userDetails').DataTable().columns(1).search($(this).text()).draw();
+            });
+        }
+        $("#name-search-container .customDropdown-toggle .selectedValue").text('Name');
+        $("#name-search-container .customDropdown-toggle .selectedValue").val('Name');
+    }
+
+    var EmailSearch = function (searchText) {
+        $('#userDetails').DataTable().columns(2).search(searchText).draw();
+
+        if (searchText != '') {
+            var arr = [];
+            if (sessionStorage.getItem('email-latest-search') === null) {
+                arr.unshift(searchText)
+            }
+            else {
+                var value = sessionStorage.getItem('email-latest-search');
+                arr = JSON.parse(value);
+                if (arr.indexOf(searchText) == -1)
+                    arr.unshift(searchText)
+            }
+            if (arr.length > 3) {
+                arr.splice(3, arr.length - 3);
+            }
+            sessionStorage.setItem('email-latest-search', JSON.stringify(arr));
+            $('#email-search-container .customDropdown-menu ul').html('');
+            for (var i = 0; i < arr.length; i++) {
+                $('#email-search-container .customDropdown-menu ul').append("<li><a href='#'>" + arr[i] + "</a></li>")
+            }
+
+
+
+            $("#email-search-container .customDropdown-menu li a").click(function () {
+                $("#email-search-container .customDropdown-toggle .selectedValue").text($(this).text());
+                $("#email-search-container .customDropdown-toggle .selectedValue").val($(this).text());
+                $('#userDetails').DataTable().columns(2).search($(this).text()).draw();
+            });
+
+        }
+        $("#email-search-container .customDropdown-toggle .selectedValue").text('EmailId');
+        $("#email-search-container .customDropdown-toggle .selectedValue").val('EmailId');
+    }
+
+    var UniversitySearch = function (searchText) {
+        $('#userDetails').DataTable().columns(4).search(searchText).draw();
+
+        if (searchText != '') {
+            var arr = [];
+            if (sessionStorage.getItem('university-latest-search') === null) {
+                arr.unshift(searchText)
+            }
+            else {
+                var value = sessionStorage.getItem('university-latest-search');
+                arr = JSON.parse(value);
+                if (arr.indexOf(searchText) == -1)
+                    arr.unshift(searchText)
+            }
+            if (arr.length > 3) {
+                arr.splice(3, arr.length - 3);
+            }
+            sessionStorage.setItem('university-latest-search', JSON.stringify(arr));
+            $('#university-search-container .customDropdown-menu ul').html('');
+            for (var i = 0; i < arr.length; i++) {
+                $('#university-search-container .customDropdown-menu ul').append("<li><a href='#'>" + arr[i] + "</a></li>")
+            }
+
+
+            $("#university-search-container .customDropdown-menu li a").click(function () {
+                $("#university-search-container .customDropdown-toggle .selectedValue").text($(this).text());
+                $("#university-search-container .customDropdown-toggle .selectedValue").val($(this).text());
+                $('#userDetails').DataTable().columns(4).search($(this).text()).draw();
+            });
+        }
+
+        $("#university-search-container .customDropdown-toggle .selectedValue").text('University');
+        $("#university-search-container .customDropdown-toggle .selectedValue").val('University');
+    }
+
 </script>

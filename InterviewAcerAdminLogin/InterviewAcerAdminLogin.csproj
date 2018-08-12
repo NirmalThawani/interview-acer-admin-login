@@ -275,8 +275,8 @@
     <Content Include="Views\Shared\_InterviewStages.cshtml" />
     <Content Include="Views\Shared\_StageGroups.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\Shared\_UserSpecificDetails.cshtml" />
-    <Content Include="Views\Shared\_AllUserDetails.cshtml" />
+    <Content Include="Views\Users\UserSpecificDetails.cshtml" />
+    <Content Include="Views\Shared\_UserDetailsHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

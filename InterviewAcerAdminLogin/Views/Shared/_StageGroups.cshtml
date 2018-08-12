@@ -9,28 +9,27 @@
                 <h4 class="panel-title">
                     <a role="button" class="editable up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href=@("#" + group.GroupId) aria-expanded="true" aria-controls="collapseOne">
                         <span data-val="@group.GroupId" class="m-t-10 display-inline">@group.Name</span>
-                        <input id="groupName" class="m-t-10 display-inline"  type="text" style="display:none; outline:none; border:0; border-bottom:5px;" /> 
+                        <input id="groupName" class="m-t-10 display-inline" type="text" style="display:none; outline:none; border:0; border-bottom:5px;" />
                     </a>
-                    
+
                     <div class="crud-wrapper">
                         <span onclick="$('[data-val ='+ @group.GroupId + ']').click();" class="f-blue capitalize m-r-20 cursor-pointer browse-file" for="excelFile">
                             <img src="~/images/upload-file.png" class="icon-width" /> Import data
                         </span>
-                        @*<label class="m-r-10 browse-file" for="excelFile">
-                                <p class="m-t-5"><img src="~/Image/open-folder.png" class="m-r-10 m-b-5" />Browse..</p>
-                            </label>*@
-                        
+
+
                         <input data-val=@group.GroupId type="file" style="display:none" class="openFile" name="excelFile" accept=".xls,.xlsx" />
 
                         <span class="capitalize m-r-20 cursor-pointer">
                             <img src="~/images/download.png" class="icon-width" />
-                            <select data-val=@group.GroupId  class="form-control custom-select-dropdown exportData">
+                            <select data-val=@group.GroupId class="form-control custom-select-dropdown exportData">
                                 <option value="0">download</option>
                                 <option value="1">Export Template</option>
                                 <option value="2">Export Data</option>
                             </select>
                         </span>
-                        <img data-val="@group.GroupId"  src="~/images/Edit.png" class="icon-width m-r-20 edit-group-name" />
+                        <img src="images/Edit.png" class="icon-width m-r-20" data-target="#edit-popup" data-toggle="modal" />
+                        @*<img data-val="@group.GroupId" src="~/images/Edit.png" class="icon-width m-r-20 edit-group-name" />*@
                         <img src="~/images/Trash.png" class="icon-width" />
                     </div>
                     <div class="clearfix"></div>
@@ -43,20 +42,28 @@
                             <ul>
                                 @foreach (var checkList in group.GroupCheckList)
                                 {
-                                    <li>
-                                        <div class="col-md-10">
-                                            <div class="radio">
-                                                <input id="first-rd" name="gender" type="radio" value="">
-                                                <label for="first-rd" class="f-bold">
-                                                    <span><i></i></span> @checkList.Name
-                                                </label>
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <span class="pull-right m-t-10"> @checkList.Points</span>
-                                        </div>
+                                    @*<li>
+                                            <div class="col-md-10">
+                                                <div class="radio">
+                                                    <input id="first-rd" name="gender" type="radio" value="">
+                                                    <label for="first-rd" class="f-bold">
+                                                        <span><i></i></span> @checkList.Name
+                                                    </label>
 
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="pull-right m-t-10"> @checkList.Points</span>
+                                            </div>
+
+                                            <div class="clearfix"></div>
+                                        </li>*@
+
+                                    <li class="customBullet-points m-b-10">
+                                        <div class="pull-left">
+                                            @checkList.Name
+                                        </div>
+                                        <span class="pull-right">@checkList.Points</span>
                                         <div class="clearfix"></div>
                                     </li>
                                 }
@@ -71,15 +78,39 @@
 
 
 </div>
+<div id="edit-popup" class="custom-modal modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content common-label ">
+            <div class="modal-body">
+                <p class="page-title">Edit group title</p>
+                <div class="row  m-b-30">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <input type="text" id="edit-title" class="form-textbox form-control" required>
+                            <label for="edit-title" class="form-label">Edit Title</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-t-10">
+                    <a href="#" class="f-blue pull-left m-t-10" data-dismiss="modal">Cancel</a>
+                    <button class="btn primary-btn pull-right">Save</button>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
+        var groupIdForNameChange;
         $('.openFile').on('change', function () {
             if ($(this).val() != "") {
-                var validExtensions = ['xlsx','xls']; //array of valid extensions
+                var validExtensions = ['xlsx', 'xls']; //array of valid extensions
                 var fileName = $(this).val().toLowerCase();
                 var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
-                if ($.inArray(fileNameExt, validExtensions) == -1){
-                //if (!regex.test()) {
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    //if (!regex.test()) {
                     alert("Please upload a valid Excel file!");
                     return false;
                 }
@@ -97,15 +128,13 @@
         $(".exportData").on('change', function () {
             var value = $(this).val();
 
-            if(value == "1")
-            {
+            if (value == "1") {
                 var groupIdValue = $(this).data('val');
-                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue+"&isTemplateOnly=true";
+                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue + "&isTemplateOnly=true";
             }
-            if(value == "2")
-            {
+            if (value == "2") {
                 var groupIdValue = $(this).data('val');
-                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue+"&isTemplateOnly=false";
+                window.location = '@Url.Action("GetCheckListExcel", "Home")' + "?groupId=" + groupIdValue + "&isTemplateOnly=false";
             }
             $(this).val("0");
         });
@@ -120,18 +149,17 @@
             if (!$(this).closest('.panel').find('.panel-collapse').hasClass('in'))
                 $(this).parents('.panel-heading').addClass('active');
         });
-        $('.edit-group-name').on('click', function () {
-            var groupid = $(this).data('val');
-            $('.editable span[data-val =' + groupid + ']').hide();
-            $('.editable span[data-val =' + groupid + ']').next('input[type = text]').show();
-            $('.editable span[data-val =' + groupid + ']').next('input[type = text]').val($('.editable span[data-val =' + groupid + ']').html());
-        });
+        //$('.edit-group-name').on('click', function () {
+        //    var groupid = $(this).data('val');
+        //    $('.editable span[data-val =' + groupid + ']').hide();
+        //    $('.editable span[data-val =' + groupid + ']').next('input[type = text]').show();
+        //    $('.editable span[data-val =' + groupid + ']').next('input[type = text]').val($('.editable span[data-val =' + groupid + ']').html());
+        //});
 
         $('.editable span').next('input[type=text]').on('focusout', function () {
             $(this).hide();
             $(this).parent().find('span').show();
-            if ($(this).val() !== "")
-            {
+            if ($(this).val() !== "") {
                 $(this).parent().find('span').html($(this).val());
                 var groupid = $(this).parent().find('span').data('val');
                 var groupNameValue = $(this).val();
@@ -155,7 +183,7 @@
                     }
                 });
             }
-               
+
         });
     });
     function UploadSelectedExcelsheet(groupId, file) {
@@ -178,12 +206,10 @@
             success: function (data) {
                 var activeStageId = $('#interviewStages .active a').data('stageid');
                 $("#GroupPartialView").load('@(Url.Action("GetGroups", "Home",null, Request.Url.Scheme))?stageId=' + activeStageId);
-                if (data.toLowerCase() == 'true')
-                {
+                if (data.toLowerCase() == 'true') {
                     alert("Checklist successfully added/updated.");
                 }
-                else
-                {
+                else {
                     alert("Some checklist were not added/updated. Please verify the excel data.");
                 }
                 $(".openFile").val('');

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace InterviewAcerAdminLogin.CustomAtribute
 {
@@ -11,12 +13,24 @@ namespace InterviewAcerAdminLogin.CustomAtribute
             tokenContainer = new TokenContainer();
         }
 
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (tokenContainer.ApiToken == null)
+            Controller controller = filterContext.Controller as Controller;
+
+            if (controller != null)
             {
-                filterContext.HttpContext.Response.RedirectToRoute(RouteConfig.LoginRouteName);
+                if (tokenContainer.ApiToken == null)
+                {
+                    filterContext.Result =
+                           new RedirectToRouteResult(
+                               new RouteValueDictionary{{ "controller", "Login" },
+                                          { "action", "Index" }
+
+                                                             });
+                }
             }
+
+            base.OnActionExecuting(filterContext);
         }
     }
 }

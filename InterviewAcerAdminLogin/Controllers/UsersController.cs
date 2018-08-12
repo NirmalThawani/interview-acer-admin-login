@@ -1,4 +1,5 @@
-﻿using InterviewAcerAdminLogin.Models;
+﻿using InterviewAcerAdminLogin.CustomAtribute;
+using InterviewAcerAdminLogin.Models;
 using InterviewAcerAdminLogin.Service;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,13 @@ namespace InterviewAcerAdminLogin.Controllers
         }
 
 
+        [Authentication]
         // GET: Users
         public async Task<ActionResult> Index()
         {
             await GetUserDetails();
+            Session["AllUserCount"] = userDetails.Count();
+            ViewBag.totalUsersCount = userDetails.Count();
             return View(userDetails);
         }
 
@@ -54,7 +58,7 @@ namespace InterviewAcerAdminLogin.Controllers
         }
 
 
-
+        [Authentication]
         public async Task<ActionResult> GetUserInformation(string userId)
         {
             UserSpecificDetails userDetails = new UserSpecificDetails();
@@ -64,8 +68,11 @@ namespace InterviewAcerAdminLogin.Controllers
                 userDetails = await responseMessage.Content.ReadAsAsync<UserSpecificDetails>(new[] { new JsonMediaTypeFormatter() });
             }
             ViewBag.baseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"].ToString();
-            return PartialView("~/Views/Shared/_UserSpecificDetails.cshtml", userDetails);
+            ViewBag.totalUsersCount = Session["AllUserCount"];
+            return PartialView("~/Views/Users/UserSpecificDetails.cshtml", userDetails);
         }
+
+
 
         public async Task<ActionResult> GetProfilePicture(string imagePath)
         {

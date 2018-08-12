@@ -21,8 +21,7 @@ namespace InterviewAcerAdminLogin
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js",
-                      "~/Scripts/bootstrap-select.min.js"));
+                      "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jsxlsx").Include("~/Scripts/xlsx.core.min.js"));
 
@@ -42,7 +41,7 @@ namespace InterviewAcerAdminLogin
                       "~/css/bootstrap.min.css",
                       "~/css/main.css",
                       "~/css/font-awesome.min.css",
-                      "~/css/bootstrap-select.min.css",
+                      //"~/css/bootstrap-select.min.css",
                       "~/css/tableexport.min.css"));
 
             bundles.Add(new StyleBundle("~/bundles/bootstrap-select").Include(

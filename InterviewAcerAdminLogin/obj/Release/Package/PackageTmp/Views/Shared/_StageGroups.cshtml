@@ -7,9 +7,11 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                    <a role="button" class="up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href=@("#" + group.Name) aria-expanded="true" aria-controls="collapseOne">
-                        <span class="m-t-10 display-inline">@group.Name</span>
+                    <a role="button" class="editable up-down-arrow accordian-title" data-toggle="collapse" data-parent="#accordion" href=@("#" + group.GroupId) aria-expanded="true" aria-controls="collapseOne">
+                        <span data-val="@group.GroupId" class="m-t-10 display-inline">@group.Name</span>
+                        <input id="groupName" class="m-t-10 display-inline"  type="text" style="display:none; outline:none; border:0; border-bottom:5px;" /> 
                     </a>
+                    
                     <div class="crud-wrapper">
                         <span onclick="$('[data-val ='+ @group.GroupId + ']').click();" class="f-blue capitalize m-r-20 cursor-pointer browse-file" for="excelFile">
                             <img src="~/images/upload-file.png" class="icon-width" /> Import data
@@ -28,13 +30,13 @@
                                 <option value="2">Export Data</option>
                             </select>
                         </span>
-                        <img src="~/images/Edit.png" class="icon-width m-r-20" />
+                        <img data-val="@group.GroupId"  src="~/images/Edit.png" class="icon-width m-r-20 edit-group-name" />
                         <img src="~/images/Trash.png" class="icon-width" />
                     </div>
                     <div class="clearfix"></div>
                 </h4>
             </div>
-            <div id=@group.Name class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div id=@group.GroupId class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-10">
@@ -48,6 +50,7 @@
                                                 <label for="first-rd" class="f-bold">
                                                     <span><i></i></span> @checkList.Name
                                                 </label>
+                                                
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -117,7 +120,43 @@
             if (!$(this).closest('.panel').find('.panel-collapse').hasClass('in'))
                 $(this).parents('.panel-heading').addClass('active');
         });
+        $('.edit-group-name').on('click', function () {
+            var groupid = $(this).data('val');
+            $('.editable span[data-val =' + groupid + ']').hide();
+            $('.editable span[data-val =' + groupid + ']').next('input[type = text]').show();
+            $('.editable span[data-val =' + groupid + ']').next('input[type = text]').val($('.editable span[data-val =' + groupid + ']').html());
+        });
 
+        $('.editable span').next('input[type=text]').on('focusout', function () {
+            $(this).hide();
+            $(this).parent().find('span').show();
+            if ($(this).val() !== "")
+            {
+                $(this).parent().find('span').html($(this).val());
+                var groupid = $(this).parent().find('span').data('val');
+                var groupNameValue = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: 'Home/UpdateGroupName?groupId=' + groupid + '&groupName=' + groupNameValue,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data == "True") {
+                            alert("Group name was updated.");
+                        }
+                        else {
+                            alert("some problem occured while updating group name.");
+                        }
+
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        alert("some problem occured while updating group name.");
+                        return false;
+                    }
+                });
+            }
+               
+        });
     });
     function UploadSelectedExcelsheet(groupId, file) {
         var data = new FormData();
@@ -150,11 +189,11 @@
                 $(".openFile").val('');
             },
             error: function (xhr, status, p3, p4) {
-                $(".openFile").val('');
-                var err = "Error " + " " + status + " " + p3 + " " + p4;
-                if (xhr.responseText && xhr.responseText[0] == "{")
-                    err = JSON.parse(xhr.responseText).Message;
-                alert(err);
+                //$(".openFile").val('');
+                //var err = "Error " + " " + status + " " + p3 + " " + p4;
+                //if (xhr.responseText && xhr.responseText[0] == "{")
+                //    err = JSON.parse(xhr.responseText).Message;
+                alert("some issue occured while adding/updating data.");
                 return false;
             }
         });

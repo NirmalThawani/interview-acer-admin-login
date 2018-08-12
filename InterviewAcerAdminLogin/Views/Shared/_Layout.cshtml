@@ -61,16 +61,25 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
     <script>
         $(document).ready(function () {
+            if (window.location.pathname.indexOf('/Users') > -1)
+            {
+                $('#sidebar-menu li').removeClass('active');
+                $('#users').addClass('active');
+            }
+            else
+            {
+                $('#sidebar-menu li').removeClass('active');
+                $('#checklist').addClass('active');
+            }
+
             $('#users').click(function () {
                 window.location.href = '@(Url.Action("Index", "Users",null, Request.Url.Scheme))' 
-                $('#sidebar-menu li').removeClass('active');
-                $(this).addClass('active');
+              
             });
 
             $('#checklist').click(function () {
                 window.location.href = '@(Url.Action("Index", "Home",null, Request.Url.Scheme))'
-                $('#sidebar-menu li').removeClass('active');
-                $(this).addClass('active');
+                
             });
         })
     </script>
