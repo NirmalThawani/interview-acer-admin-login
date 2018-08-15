@@ -19,14 +19,9 @@ namespace InterviewAcerAdminLogin.CustomAtribute
 
             if (controller != null)
             {
-                if (tokenContainer.ApiToken == null)
+                if (tokenContainer.ApiToken == null || HttpContext.Current.Session.Contents["Role"] == null || HttpContext.Current.Session.Contents["Role"].ToString() != "Admin")
                 {
-                    filterContext.Result =
-                           new RedirectToRouteResult(
-                               new RouteValueDictionary{{ "controller", "Login" },
-                                          { "action", "Index" }
-
-                                                             });
+                    filterContext.Result = new RedirectResult("~/Login");                          
                 }
             }
 

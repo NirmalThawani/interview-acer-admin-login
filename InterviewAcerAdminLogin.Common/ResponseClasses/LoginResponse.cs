@@ -12,5 +12,7 @@ namespace InterviewAcerAdminLogin.Common.ResponseClasses
         public string UserId { get; set; }
         [JsonProperty("IsAdmin")]
         public string IsAdmin { get; set; }
+        [JsonProperty("IsUniAdmin")]
+        public string IsUniAdmin { get; set; }
     }
 }

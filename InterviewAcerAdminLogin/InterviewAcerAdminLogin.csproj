@@ -164,6 +164,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\UniversityAdmin\Controllers\LoginController.cs" />
+    <Compile Include="Areas\UniversityAdmin\Controllers\UsersController.cs" />
+    <Compile Include="Areas\UniversityAdmin\CustomActionFilter\UniAdminAuthenticationAttribute.cs" />
+    <Compile Include="Areas\UniversityAdmin\UniversityAdminAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -239,6 +243,11 @@
     <Content Include="fonts\Avenir-Heavy.ttf" />
     <Content Include="fonts\Avenir-Medium.ttf" />
     <Content Include="Content\CheckListExcelDocuments\ExcelData30_07_2018_11_06_42.xlsx" />
+    <Content Include="Areas\UniversityAdmin\Views\web.config" />
+    <Content Include="Areas\UniversityAdmin\Views\Login\Login.cshtml" />
+    <Content Include="Areas\UniversityAdmin\Views\Shared\_UniAdminLayout.cshtml" />
+    <Content Include="Areas\UniversityAdmin\Views\Users\Index.cshtml" />
+    <Content Include="Areas\UniversityAdmin\Views\Users\UserSpecificDetails.cshtml" />
     <None Include="Properties\PublishProfiles\AcerAdminLofin.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
@@ -280,6 +289,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\UniversityAdmin\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<InterviewAcerAdminLogin.Models.UserGeneralDetails>
 @{
     ViewBag.Title = "Users";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/UniversityAdmin/Views/Shared/_UniAdminLayout.cshtml";
 }
 <!DOCTYPE html>
 
@@ -25,7 +25,7 @@
 <div class="container body">
     <!-- TOP NAV -->
     <div class="top_nav">
-        @{Html.RenderPartial("~/Views/Shared/_UserDetailsHeader.cshtml");}     
+        @{Html.RenderPartial("~/Views/Shared/_UserDetailsHeader.cshtml");}
     </div>
     <!-- TOP NAV END -->
     <!-- DASHBOARD-->
@@ -40,7 +40,7 @@
                                 <input id="name-search" type="text" class="form-control customSearch-control" placeholder="name search">
                                 <p class="p-t-10 f-weight700">Recently searched</p>
                             </div>
-                            <div style="display:inline-block" class="dropdown search-dropDown">
+                            <div disabled="disabled" style="display:inline-block" class="dropdown search-dropDown">
                                 <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
                                     <span class="selectedValue">Name</span>
                                     <span class="caret"></span>
@@ -91,7 +91,7 @@
                                 <div class="dropdown-menu customDropdown-menu">
 
                                     <ul>
-                                        <li><a href="#">No Search Result</a></li>
+                                        <li><a href="#">No Search Result</a></li>                                        
                                     </ul>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                         </select>
                     </div>
                     <div class="pull-right">
-                        <button id="userExport" class="btn secondary-btn">Export <img src="images/download-arrow.png" class="icon-width" /></button>
+                        <button id="userExport" class="btn secondary-btn">Export <img src="~/images/download-arrow.png" class="icon-width" /></button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -153,18 +153,18 @@
                                 <td>@user.Status</td>
                                 <td>
                                     <div class="moreDots-wrapper">
-                                        <img src="images/more_dots.png" class="cursor-pointer" />
+                                        <img src="~/images/more_dots.png" class="cursor-pointer" />
                                         <div class="moreDots-content">
                                             <ul>
                                                 <li>
                                                     <a href="#">
-                                                        <img src="images/Edit.png" class="icon-width" />
+                                                        <img src="~/images/Edit.png" class="icon-width" />
                                                         <span>Edit</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="#">
-                                                        <img src="images/Trash.png" class="icon-width" />
+                                                        <img src="~/images/Trash.png" class="icon-width" />
                                                         <span>Delete</span>
                                                     </a>
                                                 </li>
@@ -259,12 +259,12 @@
             $('#userDetails').DataTable().columns(6).search($(this).val()).draw();
         })
     });
-
+ 
     var setNameSuggestions = function()
     {
         var value = sessionStorage.getItem('name-latest-search');
         if (value) {
-            arr = JSON.parse(value);
+            arr = JSON.parse(value);           
             $('#name-search-container .customDropdown-menu ul').html('');
             for (var i = 0; i < arr.length; i++) {
                 $('#name-search-container .customDropdown-menu ul').append("<li><a href='#'>" + arr[i] + "</a></li>")
@@ -279,7 +279,7 @@
                 $("#name-search-container .customDropdown-toggle .selectedValue").val($(this).text());
                 $('#userDetails').DataTable().columns(1).search($(this).text()).draw();
             });
-        }
+        }      
     }
 
     var setEmailSuggestions = function () {
@@ -324,7 +324,7 @@
         }
     }
 
-
+   
 
     var NameSearch = function (searchText) {
         $('#userDetails').DataTable().columns(1).search(searchText).draw();
@@ -343,7 +343,7 @@
                 arr.splice(3, arr.length - 3);
             }
             sessionStorage.setItem('name-latest-search', JSON.stringify(arr));
-            setNameSuggestions();
+            setNameSuggestions();          
         }
         $("#name-search-container .customDropdown-toggle .selectedValue").text('Name');
         $("#name-search-container .customDropdown-toggle .selectedValue").val('Name');
@@ -366,7 +366,7 @@
             if (arr.length > 3) {
                 arr.splice(3, arr.length - 3);
             }
-            sessionStorage.setItem('email-latest-search', JSON.stringify(arr));
+            sessionStorage.setItem('email-latest-search', JSON.stringify(arr));          
             setEmailSuggestions();
         }
         $("#email-search-container .customDropdown-toggle .selectedValue").text('EmailId');
@@ -390,7 +390,7 @@
             if (arr.length > 3) {
                 arr.splice(3, arr.length - 3);
             }
-            sessionStorage.setItem('university-latest-search', JSON.stringify(arr));
+            sessionStorage.setItem('university-latest-search', JSON.stringify(arr));        
         }
         setUniversitySuggestions();
         $("#university-search-container .customDropdown-toggle .selectedValue").text('University');
