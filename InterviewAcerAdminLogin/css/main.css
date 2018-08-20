@@ -1667,6 +1667,14 @@ box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
     right: 20px;
     opacity: 1;
 }
+.tab-content{
+    position: relative;
+}
+.uers-pagination{
+    position: absolute;
+    bottom: -60px;
+}
+
 
 
 

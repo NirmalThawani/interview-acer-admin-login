@@ -35,17 +35,19 @@
                 <div class="dashboard-page-header">
                     <div class="customSelect-search pull-left">
                         <div id="name-search-container" style="display:inline-block">
-                            <div style="display:inline-block" class="dropdown search-dropDown">
+
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="name-search" type="text" class="form-control customSearch-control" placeholder="name search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
+                            <div disabled="disabled" style="display:inline-block" class="dropdown search-dropDown">
                                 <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
                                     <span class="selectedValue">Name</span>
                                     <span class="caret"></span>
                                 </button>
 
                                 <div class="dropdown-menu customDropdown-menu">
-                                    <div style="padding-left:0" class="searchWrapper">
-                                        <input id="name-search" type="text" class="form-control customSearch-control" placeholder="name search">
-                                        <p class="p-t-10 f-weight700">Recently searched</p>
-                                    </div>
+
                                     <ul>
                                         <li><a href="#">No Search Result</a></li>
                                     </ul>
@@ -53,21 +55,20 @@
                             </div>
                         </div>
 
-
                         <div id="email-search-container" style="display:inline-block">
 
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="email-search" type="text" class="form-control customSearch-control" placeholder="email search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
                             <div style="display:inline-block" class="dropdown search-dropDown">
                                 <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
-                                    <span class="selectedValue">Email-id</span>
+                                    <span class="selectedValue">EmailId</span>
                                     <span class="caret"></span>
                                 </button>
 
                                 <div class="dropdown-menu customDropdown-menu">
 
-                                    <div style="padding-left:0" class="searchWrapper">
-                                        <input id="email-search" type="text" class="form-control customSearch-control" placeholder="email search">
-                                        <p class="p-t-10 f-weight700">Recently searched</p>
-                                    </div>
                                     <ul>
                                         <li><a href="#">No Search Result</a></li>
                                     </ul>
@@ -76,6 +77,11 @@
                         </div>
 
                         <div id="university-search-container" style="display:inline-block">
+
+                            <div style="padding-left:0" class="searchWrapper">
+                                <input id="university-search" type="text" class="form-control customSearch-control" placeholder="university search">
+                                <p class="p-t-10 f-weight700">Recently searched</p>
+                            </div>
                             <div style="display:inline-block" class="dropdown search-dropDown">
                                 <button class="btn dropdown-toggle customDropdown-toggle" type="button" data-toggle="dropdown">
                                     <span class="selectedValue">University</span>
@@ -83,12 +89,9 @@
                                 </button>
 
                                 <div class="dropdown-menu customDropdown-menu">
-                                    <div style="padding-left:0" class="searchWrapper">
-                                        <input id="university-search" type="text" class="form-control customSearch-control" placeholder="university search">
-                                        <p class="p-t-10 f-weight700">Recently searched</p>
-                                    </div>
+
                                     <ul>
-                                        <li><a href="#">No Search Result</a></li>
+                                        <li><a href="#">No Search Result</a></li>                                        
                                     </ul>
                                 </div>
                             </div>
@@ -135,8 +138,8 @@
                                 <td>
                                     <div class="form-group checkbox">
                                         <label class="f-14">
-                                            <input type="checkbox" id="chk" name="chkTerms" class="prevent-navigate">
-                                            <span class="cr"><i class="cr-icon fa fa-check prevent-navigate"></i></span>
+                                            <input type="checkbox" id="chk" name="chkTerms">
+                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
 
                                         </label>
 
@@ -189,27 +192,24 @@
 
     $(document).ready(function () {
 
-        $('#name-search').on('keypress', function () {
-            if ((event.type = "keypress" && event.keyCode == 13)) {//|| event.type == "blur"
+        $('#name-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
                 NameSearch($(this).val());
             }
         });
 
-        $('#email-search').on('keypress', function () {
-            if ((event.type = "keypress" && event.keyCode == 13)) {
+        $('#email-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
                 EmailSearch($(this).val());
             }
         });
 
-        $('#university-search').on('keypress', function () {
-            if ((event.type = "keypress" && event.keyCode == 13)) {
+        $('#university-search').on('keypress focusout', function () {
+            if ((event.type = "keypress" && event.keyCode == 13) || event.type == "blur") {
                 UniversitySearch($(this).val());
             }
         });
 
-        $(".searchWrapper").click(function (event) {
-            event.stopPropagation();
-        });
         setNameSuggestions();
         setEmailSuggestions();
         setUniversitySuggestions();
@@ -233,14 +233,12 @@
                     columns: [1, 2, 3, 4, 5, 6]
                 }
             }],
-            "pageLength": 10
+            "pageLength": 5
         }).on('draw', function () {
-            $('tr').on('click', function (e) {
-                if (!$(e.target).hasClass('prevent-navigate')) {
-                    var userIdForSelectedUser = $(this).data('userid');
-                    if (userIdForSelectedUser) {
-                        window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)
-                    }
+            $('tr').on('click', function () {
+                var userIdForSelectedUser = $(this).data('userid');
+                if (userIdForSelectedUser) {
+                    window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)
                 }
             });
         });
@@ -249,12 +247,10 @@
             $('#userDetails').DataTable().button('0').trigger();
         });
 
-        $('tr').on('click', function (e) {
-            if (!$(e.target).hasClass('prevent-navigate')) {
-                var userIdForSelectedUser = $(this).data('userid');
-                if (userIdForSelectedUser) {
-                    window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)
-                }
+        $('tr').on('click', function () {
+            var userIdForSelectedUser = $(this).data('userid');
+            if (userIdForSelectedUser) {
+               window.location.href = '@(Url.Action("GetUserInformation", "Users", new { userId = "USERID" }, Request.Url.Scheme))'.replace("USERID", userIdForSelectedUser)
             }
         });
 
@@ -263,11 +259,12 @@
             $('#userDetails').DataTable().columns(6).search($(this).val()).draw();
         })
     });
-
-    var setNameSuggestions = function () {
+ 
+    var setNameSuggestions = function()
+    {
         var value = sessionStorage.getItem('name-latest-search');
         if (value) {
-            arr = JSON.parse(value);
+            arr = JSON.parse(value);           
             $('#name-search-container .customDropdown-menu ul').html('');
             for (var i = 0; i < arr.length; i++) {
                 $('#name-search-container .customDropdown-menu ul').append("<li><a href='#'>" + arr[i] + "</a></li>")
