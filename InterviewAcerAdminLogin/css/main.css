@@ -559,7 +559,7 @@ input[type="radio"]:checked + label span {
     height: 16px;
     float: left;
     border:1px solid #d4d3d8;
-    top: 2px;
+    top: 4px;
 }
 .checkbox .cr .cr-icon {
     position: absolute;
@@ -1506,6 +1506,9 @@ li.customBullet-points:before {
 .customSelect-search .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
  width: auto;
 }
+.btn-group.bootstrap-select>.dropdown-toggle.bs-placeholder,.btn-group.bootstrap-select>.dropdown-toggle.bs-placeholder:active,.btn-group.bootstrap-select>.dropdown-toggle.bs-placeholder:focus,.btn-group.bootstrap-select>.dropdown-toggle.bs-placeholder:hover{
+    color:#333;
+}
 .customSelect-search .dropdown-header {
     padding: 10px 20px 5px 20px;
     font-size: 14px;
@@ -1550,6 +1553,9 @@ li.customBullet-points:before {
 }
 .searchWrapper{
     padding:6px 20px;
+}
+.searchWrapper .customSearch-control{
+    min-width:170px;
 }
 .dropdown-menu li a:focus, .dropdown-menu li a:hover {
     color: #262626;

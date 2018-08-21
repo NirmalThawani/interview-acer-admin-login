@@ -60,6 +60,7 @@
             //data: JSON.stringify(model),
             success: function (content) {
                 $('#GroupPartialView').html(content);
+                
             },
             error: function (e) { }
         });
@@ -69,6 +70,7 @@
         var activeInterviewType = $('#interviewStages .active a').data('stageid');
         getGroups(activeInterviewType);
         $('#interviewStages a').on('click', function () {
+            $('#nameValidation').hide();
             activeInterviewType = $(this).data('stageid')
             getGroups(activeInterviewType);
         });

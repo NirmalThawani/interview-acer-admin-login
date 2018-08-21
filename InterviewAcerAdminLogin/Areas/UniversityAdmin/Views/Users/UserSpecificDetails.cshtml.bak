@@ -1,8 +1,9 @@
 ﻿@model InterviewAcerAdminLogin.Models.UserSpecificDetails
 @{
-    ViewBag.Title = "Users";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "UserSpecificDetails";
+    Layout = "~/Areas/UniversityAdmin/Views/Shared/_UniAdminLayout.cshtml";
 }
+
 <!DOCTYPE html>
 
 <head>
@@ -32,12 +33,12 @@
                             <img src="~/images/back-arrow.png" class="icon-width m-r-15 m-b-5" />Back to list
                         </a>
                     </div>
-                    @*<div class="pull-right customSelect-search">
+                    <div class="pull-right customSelect-search">
                         <select class="selectpicker m-r-15 normalSelectDrop-down">
                             <option>Edit</option>
                             <option>Delete</option>
                         </select>
-                    </div>*@
+                    </div>
                     <div class="clearfix"></div>
                 </div>
                 <!-- page header end-->
@@ -115,7 +116,7 @@
                             <div class="interview-card text-center card-left m-t-10 m-r-10">
                                 <p class="Avenir-Heavy f-20 m-b-20">Points</p>
                                 <p class="Avenir-Heavy f-orange f-32 m-b-20">@Model.TotalNumberOfPointsScored</p>
-                                <p>Total points earn by user</p>
+                                <p>Total coins earn by user</p>
                             </div>
                             <!-- Points end-->
                             <!-- Tasks completed -->
@@ -243,4 +244,5 @@
     });
 
 </script>
+
 

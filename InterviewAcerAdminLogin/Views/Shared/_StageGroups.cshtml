@@ -28,7 +28,7 @@
                                 <option value="2">Export Data</option>
                             </select>
                         </span>
-                        <img src="images/Edit.png" class="icon-width m-r-20" data-target="#edit-popup" data-toggle="modal" />
+                        <img src="images/Edit.png" class="edit-title-icon icon-width m-r-20" data-target="#edit-popup" data-toggle="modal" />
                         @*<img data-val="@group.GroupId" src="~/images/Edit.png" class="icon-width m-r-20 edit-group-name" />*@
                         <img src="~/images/Trash.png" class="icon-width" />
                     </div>
@@ -78,7 +78,7 @@
 
 
 </div>
-<div id="edit-popup" class="custom-modal modal fade" role="dialog">
+<div id="edit-popup" class="custom-modal modal" role="dialog">
     <div class="modal-dialog modal-sm">
         <!-- Modal content-->
         <div class="modal-content common-label ">
@@ -91,19 +91,70 @@
                             <label for="edit-title" class="form-label">Edit Title</label>
                         </div>
                     </div>
+                    <div id="grpTitleValidation" class="col-md-12" style="padding-top:10px; color:#a94442" hidden>
+                        Please enter the group title.
+                    </div>
                 </div>
                 <div class="p-t-10">
-                    <a href="#" class="f-blue pull-left m-t-10" data-dismiss="modal">Cancel</a>
-                    <button class="btn primary-btn pull-right">Save</button>
+                    <a id="cancelGroupTitle" href="#" class="f-blue pull-left m-t-10" data-dismiss="modal">Cancel</a>
+                    <button id="btnSaveGroupTitle" class="btn primary-btn pull-right">Save</button>
                     <div class="clearfix"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
 <script>
     $(document).ready(function () {
         var groupIdForNameChange;
+
+        $('#btnSaveGroupTitle').on('click', function () {
+            if ($('#edit-title').val() == '') {
+                $('#grpTitleValidation').show();
+            }
+            else {              
+                $.ajax({
+                    type: "GET",
+                    url: 'Home/UpdateGroupName?groupId=' + groupIdForNameChange + '&groupName=' + $('#edit-title').val(),
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data == "True") {
+                            $('#edit-popup').modal('hide');
+                            $('.modal-backdrop').remove();                           
+                            $('span[data-val=' + groupIdForNameChange + ']').html($('#edit-title').val());
+                            $('#edit-title').val('');
+                        }
+                        else {
+                            alert("some problem occured while updating group name.");
+                        }
+
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        alert("some problem occured while updating group name.");
+                        return false;
+                    }
+                });
+            }
+        });
+        $('#edit-title').on('keyup', function () {
+            if ($('#edit-title').val() == '') {
+                $('#grpTitleValidation').show();
+            }
+            else {
+                $('#grpTitleValidation').hide();
+            }
+        });
+        $('#cancelGroupTitle').on('click', function () {
+            $('#edit-title').val('');
+            $('#grpTitleValidation').hide();
+        });
+        $('.edit-title-icon').on('click', function () {
+            groupIdForNameChange = $(this).parent().find('input').data('val');            
+            $('#edit-title').val($('span[data-val=' + groupIdForNameChange + ']').html());
+        })
         $('.openFile').on('change', function () {
             if ($(this).val() != "") {
                 var validExtensions = ['xlsx', 'xls']; //array of valid extensions
