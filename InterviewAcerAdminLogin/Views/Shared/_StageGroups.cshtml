@@ -104,8 +104,7 @@
         </div>
     </div>
 </div>
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
+
 <script>
     $(document).ready(function () {
         var groupIdForNameChange;
@@ -122,7 +121,7 @@
                     processData: false,
                     success: function (data) {
                         if (data == "True") {
-                            $('#edit-popup').modal('hide');
+                            $('#edit-popup').hide();
                             $('.modal-backdrop').remove();                           
                             $('span[data-val=' + groupIdForNameChange + ']').html($('#edit-title').val());
                             $('#edit-title').val('');
@@ -154,6 +153,7 @@
         $('.edit-title-icon').on('click', function () {
             groupIdForNameChange = $(this).parent().find('input').data('val');            
             $('#edit-title').val($('span[data-val=' + groupIdForNameChange + ']').html());
+            $('#edit-popup').show();
         })
         $('.openFile').on('change', function () {
             if ($(this).val() != "") {

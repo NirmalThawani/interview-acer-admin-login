@@ -214,15 +214,21 @@
 
 <script>
     $(document).ready(function () {
-        $.ajax({
-            url: 'GetProfilePicture?imagePath=' + '@Model.imagePath',
-            type: 'GET',
-            contentType: 'application/html',
-            success: function (content) {
-                $('#userProfilePic').attr('src', content);
-            },
-            error: function (e) { }
-        });
+        if('@Model.imagePath' != '')
+        {
+            $.ajax({
+                url: 'GetProfilePicture?imagePath=' + '@Model.imagePath',
+                type: 'GET',
+                contentType: 'application/html',
+                success: function (content) {
+                    $('#userProfilePic').attr('src', content);
+                },
+                error: function (e) { }
+            });
+        }
+       
+
+        $.fn.dataTable.moment('DD/MM/YYYY');
         $('#interviewDetails').DataTable({
             "dom": '', "columns": [
          { "orderable": false },
